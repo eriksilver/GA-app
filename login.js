@@ -1,0 +1,53 @@
+var app = angular.module("GA_Dashboard", ["firebase"]);
+
+app.controller("LoginCtrl", ["$scope", "$firebaseAuth", function($scope, $firebaseAuth) {
+  var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/GA_Dash");
+  $scope.authObj = $firebaseAuth(ref);
+
+  $scope.currentUser = null;
+  // console.log("here is scope.authObj:", $scope.authObj);
+
+  //login method
+  $scope.login = function () {
+
+    $scope.authObj.$authWithPassword({
+      email    : $scope.newUser.email,
+      password : $scope.newUser.password
+    }).then(function(authData) {
+      $scope.currentUser = authData.password.email;
+      console.log("Logged in as:", authData.uid);
+      console.log("Full authData:", authData);
+      console.log("dfsfsfs", authData.password.email);
+
+    }).catch(function(error) {
+      console.error("Authentication failed:", error);
+    });
+
+    $scope.resetForm ();
+
+  };
+
+
+  //register method
+  $scope.register = function () {
+    ref.createUser({
+      email    : $scope.newUser.email,
+      password : $scope.newUser.password
+    }, function(error, userData) {
+      if (error) {
+        console.log("Error creating user:", error);
+      } else {
+        console.log("Successfully created user account with uid:", userData.uid);
+      }
+    });
+
+    $scope.resetForm ();
+
+  };
+
+  //resets newUser object
+  $scope.resetForm = function (email,password) {
+    $scope.newUser = {email: '', password: ''};
+  };
+
+}]);
