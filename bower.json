@@ -1,0 +1,16 @@
+{
+  "name": "GA-App",
+  "version": "0.0.1",
+  "authors": [
+    "eriksilver <eriksilver@users.noreply.github.com>"
+  ],
+  "description": "Google Analytics app",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
