@@ -10,20 +10,20 @@ angular.module('GA_Dashboard')
       requireBase: false
     });
 
-    // For any unmatched url, send to route1
+    // For any unmatched url, send to /
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
       .state('landing', {
         url: '/',
-        templateUrl: '/index.html',
+        templateUrl: '/login.html',
         controller: 'LoginCtrl'
       })
 
       .state('home', {
         url: '/home',
         templateUrl: '/home.html',
-        controller: 'LoginCtrl'
+        controller: 'HomeCtrl'
       })
 
       .state('login', {
@@ -31,5 +31,12 @@ angular.module('GA_Dashboard')
         templateUrl: '/login.html',
         controller: 'LoginCtrl'
       })
+
+      .state('test', {
+        url: '/test',
+        templateUrl: '/HelloAnalytics.html',
+        controller: 'LoginCtrl'
+      })
+
 
 });

@@ -3,34 +3,41 @@
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
-<style media="screen">
-  .container {
-    width: 400px;
-  }
-</style>
+
 
 <body>
 
   <div class="container">
-    <form class="form-signin">
-      <!-- Form heading -->
-      <h1>Hello!</h1>
-      <h2 class="form-signin-heading" ng-if="$scope.currentUser">{{$scope.currentUser}}</h2>
-      <!-- Email input -->
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input ng-model="newUser.email" type="email" id="inputEmail" class="form-control" placeholder=
-                  "Email address" required autofocus>
-      <!-- Password Input -->
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input ng-model="newUser.password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-      <!-- Remember me checkbox -->
-      <div class="checkbox">
-        <label><input type="checkbox" value="remember-me"/>Remember Me</label>
-      </div>
-      <!-- Submit buttons -->
-      <button ng-click="login(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-      <button ng-click="register(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-success btn-block">Register</button>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <form class="form-signin">
+            <!-- Form heading -->
+            <h1>The GA Dashboard</h1>
+            <h2 class="form-signin-heading" ng-if="$scope.currentUser">{{$scope.currentUser}}</h2>
+            <!-- Email input -->
+            <div class="form-group input-group input-group-lg">
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+              <input ng-model="newUser.email" type="email" id="inputEmail"
+                      class="form-control" placeholder="Email address" required autofocus>
+            </div>
+            <!-- Password Input -->
+            <div class="form-group input-group input-group-lg">
+              <label for="inputPassword" class="sr-only">Password</label>
+              <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+              <input ng-model="newUser.password" type="password" id="inputPassword"
+                      class="form-control" placeholder="Password" required>
+            </div>
+            <!-- Remember me checkbox -->
+            <div class="checkbox">
+              <label><input type="checkbox" value="remember-me"/>Remember Me</label>
+            </div>
+            <!-- Submit buttons -->
+            <button ng-click="login(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+            <button ng-click="register(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-success btn-block">Register</button>
 
-    </form>
+          </form>
+      </div>
+    </div>
   </div>
 </body>

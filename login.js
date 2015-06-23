@@ -9,7 +9,7 @@ angular.module('GA_Dashboard')
 .controller("LoginCtrl", [
   "$scope", "$firebaseAuth",
   function($scope, $firebaseAuth) {
-    console.log("asdfsfsdaf");
+    console.log("LoginCtrl ran");
     var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
     $scope.authObj = $firebaseAuth(ref);
 

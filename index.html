@@ -30,12 +30,15 @@
 
   <body>
     <div class="container">
-        <h1>Google Analytics Dashboard</h1>
-        <p>Useful Analytics at Your Fingertips</p>
-        <ul>
-          <li><a ui-sref="landing">Landing</a></li>
-          <li><a ui-sref="home">Home</a></li>
-          <li><a ui-sref="login">login</a></li>
+        <div class="page-header">
+          <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
+        </div>
+        <ul class="nav nav-pills">
+          <li role="presentation"><a ui-sref="landing">Landing</a></li>
+          <li role="presentation"><a ui-sref="login">Login</a></li>
+          <li role="presentation"><a ui-sref="home">Home</a></li>
+          <li role="presentation"><a ui-sref="test">GA Test</a></li>
+
         </ul>
         <div ui-view></div>
     </div> <!--container-->
@@ -51,6 +54,8 @@
     <script src="app.js"></script>
     <script src="routes.js"></script>
     <script src="login.js"></script>
+    <script src="home.js"></script>
+
 
   </body>
 </html>
