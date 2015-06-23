@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>Google Analytics Dashboard</title>
 
     <!-- Bootstrap -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,56 +17,40 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- Angular -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.js"></script>
     <!-- Firebase -->
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
-    <script src="login.js"></script>
+
   </head>
 
-  <style media="screen">
-    .container {
-      width: 400px;
-    }
-  </style>
 
-  <body ng-controller="LoginCtrl">
 
+  <body>
     <div class="container">
-      <form class="form-signin">
-        <!-- Form heading -->
-        <h1>Hello!</h1>
-        <h2 class="form-signin-heading" ng-if="$scope.currentUser">{{$scope.currentUser}}</h2>
-        <!-- Email input -->
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input ng-model="newUser.email" type="email" id="inputEmail" class="form-control" placeholder=
-                    "Email address" required autofocus>
-        <!-- Password Input -->
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input ng-model="newUser.password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <!-- Remember me checkbox -->
-        <div class="checkbox">
-          <label><input type="checkbox" value="remember-me"/>Remember Me</label>
-        </div>
-        <!-- Submit buttons -->
-        <button ng-click="login(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-        <button ng-click="register(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-success btn-block">Register</button>
+        <h1>Google Analytics Dashboard</h1>
+        <p>Useful Analytics at Your Fingertips</p>
+        <ul>
+          <li><a ui-sref="landing">Landing</a></li>
+          <li><a ui-sref="home">Home</a></li>
+          <li><a ui-sref="login">login</a></li>
+        </ul>
+        <div ui-view></div>
+    </div> <!--container-->
 
-      </form>
-    </div>
-    <!-- connect firebase & setup login -->
-
-
-    <!-- //allow user to connect GA account
-
-
-    //default views for dashboard -->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+    <!-- JS files -->
+    <script src="app.js"></script>
+    <script src="routes.js"></script>
+    <script src="login.js"></script>
 
   </body>
 </html>
