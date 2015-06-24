@@ -11,5 +11,5 @@ angular.module('GA_Dashboard')
     console.log("HomeCtrl ran");
     var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
 
-    
+
 }]);
