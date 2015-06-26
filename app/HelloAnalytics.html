@@ -11,6 +11,9 @@
 
 <textarea cols="80" rows="20" id="query-output"></textarea>
 
+<script src="https://apis.google.com/js/client.js?onload=authorize"></script>
+
+
 <script>
 
   // Replace with your client ID from the developer console.
@@ -149,6 +152,5 @@ function queryCoreReportingApi(profileId) {
   document.getElementById('auth-button').addEventListener('click', authorize);
 </script>
 
-<script src="https://apis.google.com/js/client.js?onload=authorize"></script>
 
 </body>
