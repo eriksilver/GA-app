@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+
+    <script>
+      var app = angular.module("app", []);
+
+      app.controller("ApplicationController", [
+        "$scope",
+        "$interval",
+        function($scope, $interval) {
+          $scope.header = "Hello, wecome to my application!";
+          $scope.count = 0;
+
+          $interval(function() {
+            $scope.count += 1;
+          }, 1000);
+        }
+      ]);
+    </script>
+  </head>
+  <body ng-controller="ApplicationController">
+    <h1 ng-if="false">Loading…</h1>
+    <h1>{{header}}</h1>
+    {{count}}
+  </body>
+</html>

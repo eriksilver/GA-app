@@ -12,5 +12,11 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "angular": "~1.4.1"
+  },
+  "dependencies": {
+    "angular": "~1.4.1"
+  }
 }
