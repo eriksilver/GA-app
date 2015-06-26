@@ -10,20 +10,15 @@ angular.module('GA_Dashboard')
     // For any unmatched url, send to /
     $urlRouterProvider.otherwise('/');
     $stateProvider
-      .state('landing', {
+      .state('login', {
         url: '/',
-        templateUrl: '/login.html',
+        templateUrl: 'app/login.html',
         controller: 'LoginCtrl'
       })
       .state('home', {
         url: '/home',
         templateUrl: 'app/home.html',
         controller: 'HomeCtrl'
-      })
-      .state('login', {
-        url: '/login',
-        templateUrl: 'app/login.html',
-        controller: 'LoginCtrl'
       })
       .state('test', {
         url: '/test',
