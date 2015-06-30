@@ -13,13 +13,3 @@ angular.module('GA_Dashboard')
 
 
 }]);
-
-//Angular store current user
-
-//use Service to share data between contollers -adds dependency to each contoller
-///somewhat more verbose
-//or use root or application controller
-///
-//my current controllers are independent, without parents
-
-//could create my own auth that extracts Firebase data
