@@ -7,8 +7,8 @@ angular.module('GA_Dashboard')
 // }]);
 
 .controller("LoginCtrl", [
-  "$scope", "$firebaseAuth",
-  function($scope, $firebaseAuth) {
+  "$scope", "$firebaseAuth", "$state",
+  function($scope, $firebaseAuth, $state) {
     console.log("LoginCtrl ran");
     var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
     $scope.authObj = $firebaseAuth(ref);
@@ -27,6 +27,7 @@ angular.module('GA_Dashboard')
         console.log("Logged in as:", authData.uid);
         console.log("Full authData:", authData);
         console.log("dfsfsfs", authData.password.email);
+        $state.go("home");
 
       }).catch(function(error) {
         console.error("Authentication failed:", error);

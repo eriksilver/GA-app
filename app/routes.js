@@ -5,10 +5,10 @@ angular.module('GA_Dashboard')
   .config(function ($stateProvider,$urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode({
       enabled: true,
-      requireBase: false
+      // requireBase: false
     });
     // For any unmatched url, send to /
-    $urlRouterProvider.otherwise('/');
+    // $urlRouterProvider.otherwise('/');
     $stateProvider
       .state('login', {
         url: '/',
@@ -23,6 +23,11 @@ angular.module('GA_Dashboard')
       .state('test', {
         url: '/test',
         templateUrl: 'app/HelloAnalytics.html',
+        controller: 'LoginCtrl'
+      })
+      .state('OauthHandler', {
+        url: '/handler',
+        templateUrl: 'OauthHandler.html',
         controller: 'LoginCtrl'
       })
 });

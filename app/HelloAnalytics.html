@@ -1,4 +1,5 @@
-
+<!DOCTYPE html>
+<html>
 <head>
   <meta charset="utf-8">
   <title>Hello Analytics - A quickstart guide for JavaScript</title>
@@ -14,7 +15,7 @@
 <script>
 
   // Replace with your client ID from the developer console.
-  var CLIENT_ID = '219791845501-2mja72b93f5d6gqlv2so27c0bpgd597r.apps.googleusercontent.com';
+  var CLIENT_ID = '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com';
 
   // Set authorized scope.
   var SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
@@ -29,6 +30,7 @@
       scope: SCOPES,
       immediate: useImmdiate
     };
+    console.log("event authorized");
 
     gapi.auth.authorize(authData, function(response) {
       var authButton = document.getElementById('auth-button');
@@ -40,6 +42,7 @@
         queryAccounts();
       }
     });
+    console.log("authdata completed");
   }
 
 
@@ -50,6 +53,7 @@ function queryAccounts() {
     // Get a list of all Google Analytics accounts for this user
     gapi.client.analytics.management.accounts.list().then(handleAccounts);
   });
+  console.log("GA client lib loaded");
 }
 
 
@@ -64,6 +68,7 @@ function handleAccounts(response) {
   } else {
     console.log('No accounts found for this user.');
   }
+  console.log("handleAccounts complete");
 }
 
 
@@ -149,6 +154,7 @@ function queryCoreReportingApi(profileId) {
   document.getElementById('auth-button').addEventListener('click', authorize);
 </script>
 
-<script src="https://apis.google.com/js/client.js?onload=authorize"></script>
+<script src="https://apis.google.com/js/client.js?onload=authorize&output=embed"></script>
 
 </body>
+</html>
