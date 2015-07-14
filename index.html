@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="GA_Dashboard">
+<!-- <html lang="en" ng-app="GA_Dashboard"> -->
+<html lang="en" ng-app="demo" id="ng-app">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,12 +25,21 @@
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
     <base href="/" />
+
+    <!-- UI Router Authorization demo -->
+    <link data-require="bootstrap-css@3.x" data-semver="3.0.3" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
+    <script data-require="angular.js@*" data-semver="1.2.9" src="http://code.angularjs.org/1.2.9/angular.js"></script>
+    <script data-require="ui-bootstrap@*" data-semver="0.10.0" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
+    <script data-require="ui-router@*" data-semver="0.2.8" src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/app/script.js"></script>
+
   </head>
 
 
 
   <body>
-    <div class="container">
+    <!-- <div class="container">
         <div class="page-header">
           <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
         </div>
@@ -40,7 +50,14 @@
 
         </ul>
         <main ui-view></main>
-    </div> <!--container-->
+    </div> -->
+
+    <!-- Authorization demo code -->
+    <h1>UI-Router Authorization Demo</h1>
+    <div ui-view="content">
+      Please wait while we retrieve your user info
+    </div>
+
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -50,10 +67,10 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
     <!-- JS files -->
-    <script src="/app/app.js"></script>
-    <script src="/app/routes.js"></script>
-    <script src="/app/login.js"></script>
-    <script src="/app/home.js"></script>
+    <!-- // <script src="/app/app.js"></script>
+    // <script src="/app/routes.js"></script>
+    // <script src="/app/login.js"></script>
+    // <script src="/app/home.js"></script> -->
 
 
   </body>
