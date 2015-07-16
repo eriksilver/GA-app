@@ -27,7 +27,8 @@ angular.module('GA_Dashboard')
         console.log("Logged in as:", authData.uid);
         console.log("Full authData:", authData);
         console.log("dfsfsfs", authData.password.email);
-        $state.go("home");
+        //upon authentication go to Connect Screen
+        $state.go("connect");
 
       }).catch(function(error) {
         console.error("Authentication failed:", error);

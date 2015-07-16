@@ -34,9 +34,13 @@
           <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
         </div>
         <ul class="nav nav-pills">
+          <li role="presentation"><a ui-sref="welcome">Welcome</a></li>
           <li role="presentation"><a ui-sref="login">Login</a></li>
-          <li role="presentation"><a ui-sref="home">Home</a></li>
+          <li role="presentation"><a ui-sref="connect">Connect GA Account</a></li>
+          <li role="presentation"><a ui-sref="dashboard">Dashboard</a></li>
+          <li role="presentation"><a ui-sref="profile">Profile</a></li>
           <li role="presentation"><a ui-sref="test">GA Test page</a></li>
+
 
         </ul>
         <main ui-view></main>
@@ -48,12 +52,17 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+
 
     <!-- JS files -->
     <script src="/app/app.js"></script>
     <script src="/app/routes.js"></script>
     <script src="/app/login.js"></script>
-    <script src="/app/home.js"></script>
+    <script src="/app/connect.js"></script>
+    <script src="/app/loginModal.js"></script>
+    <script src="/app/LoginModalCtrl.js"></script>
+
 
 
   </body>
