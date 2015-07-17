@@ -26,8 +26,7 @@ angular.module('GA_Dashboard')
         $scope.currentUser = authData.password.email;
         console.log("Logged in as:", authData.uid);
         console.log("Full authData:", authData);
-        console.log("dfsfsfs", authData.password.email);
-        $state.go("home");
+        $state.go("connect");
 
       }).catch(function(error) {
         console.error("Authentication failed:", error);
@@ -51,7 +50,11 @@ angular.module('GA_Dashboard')
       });
 
       $scope.resetForm ();
+    };
 
+    //logout user
+    $scope.logout = function () {
+      ref.unauth();
     };
 
     //resets newUser object
