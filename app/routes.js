@@ -11,7 +11,7 @@ angular.module('GA_Dashboard')
     // $urlRouterProvider.otherwise('/');
     $stateProvider
       .state('welcome', {
-        url: '/welcome',
+        url: '/',
         templateUrl: 'app/welcome.html',
         controller: 'ConnectCtrl', //update controller
         data: {
@@ -19,7 +19,7 @@ angular.module('GA_Dashboard')
         }
       })
       .state('login', {
-        url: '/',
+        url: '/login',
         templateUrl: 'app/login.html',
         controller: 'LoginCtrl',
         data: {

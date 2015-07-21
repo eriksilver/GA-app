@@ -16,36 +16,40 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
   //Uses the onAuth() method to listen for changes in user authentication state
   function authDataCallback(authData) {
     if (authData) {
-      console.log("***User " + authData.uid + " is logged in with " + authData.provider);
+      //if authData is not null; then we have a User logged in via Firebase authentication
+      //Here we assign the logged in user to the rootscope.currentUser
       $rootScope.currentUser = authData;
-      // $rootScope.currentUser = {
-      //   id: authData.id,
-      // };
+      //Console log to confirm a user is logged in
+      console.log("***User " + authData.uid + " is logged in with " + authData.provider);
+        //Could be more granular on what properties we want current user to have
+          // $rootScope.currentUser = {
+          //   id: authData.id,
+          // };
     } else {
-      console.log("***User is logged out");
+      //if authData is null (user is logged out); be explicit with rootscope.currentUser
       $rootScope.currentUser = null;
+      //Console log to confirm user is logged out
+      console.log("***User is logged out");
     }
   }
-  // Register the callback to be fired every time auth state changes
+  // Register a callback to fire the abov function every time auth state changes
   var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
   ref.onAuth(authDataCallback);
 
 
-
   //subscribes to $stateChangeStart to inspect for requireLogin property
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    //checks for data property "requirelogin" (true/false) in the stateprovider
     var requireLogin = toState.data.requireLogin;
-
-    //assumes currentUser is on rootScope --how to tie into Firebase?
-    //authdata !== 'undefined'
-    //$rootScope.currentUser
+    //true if $rootScope.currentUser is defined and is not null
     var currentUserExists = angular.isDefined($rootScope.currentUser) && $rootScope.currentUser !== null;
+    //true if requireLogin is required and user is logged out (currentUser is null)
     var shouldRedirectToLogin = requireLogin && !currentUserExists;
+    //if true, direct to login page
     if (shouldRedirectToLogin) {
       event.preventDefault();
       // redirect back to login
       $state.go("login");
     }
-
   });
 }]);
