@@ -24,12 +24,25 @@ angular.module('GA_Dashboard')
         password : $scope.newUser.password
       }).then(function(authData) {
         $scope.currentUser = authData.password.email;
-        console.log("Logged in as:", authData.uid);
-        console.log("Full authData:", authData);
+          console.log("Logged in as:", authData.uid);
+          console.log("Authenticated successfully with payload:", authData);
+        //with successful login, direct to Connect page
         $state.go("connect");
-
+        //catch method used for error handling
       }).catch(function(error) {
-        console.error("Authentication failed:", error);
+        switch (error.code) {
+          case "INVALID_EMAIL":
+          console.log("The specified user account email is invalid.");
+          break;
+          case "INVALID_PASSWORD":
+          console.log("The specified user account password is incorrect.");
+          break;
+          case "INVALID_USER":
+          console.log("The specified user account does not exist.");
+          break;
+          default:
+          console.log("Error logging user in:", error);
+        };
       });
 
       $scope.resetForm ();
