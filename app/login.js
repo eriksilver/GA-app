@@ -73,7 +73,16 @@ angular.module('GA_Dashboard')
             console.log("Error creating user:", error);
           }
         } else {
-          console.log("Successfully created user account with uid:", userData.uid);
+          //note userData consists solely of UID
+          console.log("Successfully created user account with uid:", userData);
+
+          //save user at Registration with UID and empty object
+          var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
+          ref.child("users").child(userData.uid).set({
+            provider: " ",
+            email: $scope.newUser.email,
+            name: " "
+          });
         }
       });
 

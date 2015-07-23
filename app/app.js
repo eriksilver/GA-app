@@ -15,7 +15,7 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
 
   // For each user, create a profile object
   // Separate when user registers -UID is created
-  // vs When user logs in - authData is created 
+  // vs When user logs in - authData is created
   // When User is authorized, check if they have a Profile
   // If not, save their authdata as a User
 
@@ -63,28 +63,28 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
   // we would probably save a profile when we register new users on our site
   // we could also read the profile to see if it's null
   // here we will just simulate this with an isNewUser boolean
-  var isNewUser = true;
-  var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
-  ref.onAuth(function(authData) {
-    if (authData && isNewUser) {
-      // save the user's profile into the database so we can list users,
-      // use them in Security and Firebase Rules, and show profiles
-      ref.child("users").child(authData.uid).set({
-        provider: authData.provider,
-        name: getName(authData)
-      });
-    }
-  });
-  // find a suitable name based on the meta info given by each provider
-  function getName(authData) {
-    switch(authData.provider) {
-      case 'password':
-      return authData.password.email.replace(/@.*/, '');
-      case 'twitter':
-      return authData.twitter.displayName;
-      case 'facebook':
-      return authData.facebook.displayName;
-    }
-  }
+  // var isNewUser = true;
+  // var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+  // ref.onAuth(function(authData) {
+  //   if (authData && isNewUser) {
+  //     // save the user's profile into the database so we can list users,
+  //     // use them in Security and Firebase Rules, and show profiles
+  //     ref.child("users").child(authData.uid).set({
+  //       provider: authData.provider,
+  //       name: getName(authData)
+  //     });
+  //   }
+  // });
+  // // find a suitable name based on the meta info given by each provider
+  // function getName(authData) {
+  //   switch(authData.provider) {
+  //     case 'password':
+  //     return authData.password.email.replace(/@.*/, '');
+  //     case 'twitter':
+  //     return authData.twitter.displayName;
+  //     case 'facebook':
+  //     return authData.facebook.displayName;
+  //   }
+  // }
 
 }]);
