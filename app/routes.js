@@ -48,9 +48,9 @@ angular.module('GA_Dashboard')
       .state('profile', {
         url: '/profile',
         templateUrl: 'app/profile.html',
-        controller: 'ConnectCtrl', //update controller
+        controller: 'ProfileCtrl', //update controller
         data: {
-          requireLogin: true
+          requireLogin: false
         }
       })
       .state('test', {

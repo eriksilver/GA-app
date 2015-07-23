@@ -58,6 +58,7 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
       //if authData is not null; then we have a User logged in via Firebase authentication
       //Here we assign the logged in user to the rootscope.currentUser
       $rootScope.currentUser = authData;
+      console.log("&&$rootScope.currentUser",$rootScope.currentUser);
       //Console log to confirm a user is logged in
       console.log("***User " + authData.uid + " is logged in with " + authData.provider);
       //Could be more granular on what properties we want current user to have
