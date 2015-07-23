@@ -25,7 +25,6 @@ angular.module('GA_Dashboard')
       }).then(function(authData) {
         //?? currentUser picks up only email from authData
         $scope.currentUser = authData.password.email;
-          console.log("$scope.currentUser:",$scope.currentUser);
           console.log("Logged in as:", authData.uid);
           console.log("Authenticated successfully with payload:", authData);
 
