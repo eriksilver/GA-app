@@ -79,6 +79,7 @@ angular.module('GA_Dashboard')
           //save user at Registration with UID and empty object
           var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
           ref.child("users").child(userData.uid).set({
+            profileExist: false,
             provider: " ",
             email: $scope.newUser.email,
             name: " "
