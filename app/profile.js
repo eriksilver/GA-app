@@ -48,8 +48,11 @@ angular.module('GA_Dashboard')
       $scope.$apply();
     });
 
-
-
-    //$scope.firstName = "John";
-
+    $scope.saveUser = function () {
+      ref.child(userID).set({
+        email: $scope.userEmail,
+        name: $scope.userName
+      });
+    };
+    // console.log("user details"; )
 }]);

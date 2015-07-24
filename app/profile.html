@@ -4,8 +4,10 @@
         <form class="form-signin">
           <!-- Form heading -->
           <h1>Profile</h1>
-          <!-- User: <input type="text" ng-model="user.provider"><br> -->
-          <!-- Email -->
+          <pre>
+            hello
+          </pre>
+          <!-- Username input -->
           <br>
           <h3>User Name</h3>
           <div class="form-group input-group input-group-lg">
@@ -13,11 +15,14 @@
             <input ng-model="userName" class="form-control">
           </div>
           <br>
+          <!-- Email input-->
           <h3>Email</h3>
           <div class="form-group input-group input-group-lg">
             <label for="inputEmail" class="sr-only">Email address</label>
             <input ng-model="userEmail" class="form-control">
           </div>
+          <!-- Submit button -->
+          <button ng-click="saveUser(userName, userEmail)" type="submit" class="btn btn-lg btn-primary btn-block">Save</button>
 
         </form>
     </div>
