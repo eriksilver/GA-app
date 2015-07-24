@@ -1,5 +1,5 @@
 
-console.log('login JS before controller');
+//console.log('login JS before controller');
 
 angular.module('GA_Dashboard')
 // app.config(['$logProvider', function($logProvider){

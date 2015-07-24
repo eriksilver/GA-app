@@ -1,5 +1,5 @@
 'use strict';
-console.log("routes.js declared");
+//console.log("routes.js declared");
 angular.module('GA_Dashboard')
 
   .config(function ($stateProvider,$urlRouterProvider, $locationProvider) {
@@ -50,7 +50,7 @@ angular.module('GA_Dashboard')
         templateUrl: 'app/profile.html',
         controller: 'ProfileCtrl', //update controller
         data: {
-          requireLogin: false
+          requireLogin: true
         }
       })
       .state('test', {
