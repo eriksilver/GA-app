@@ -30,9 +30,12 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
         var profileCheck = snapshot.val();
 
         //if user does NOT have a profile; SAVE profile data
-        if (!profileCheck.profileExist) {
+        if (profileCheck.profileExist === false) {
           // save the user's profile into the database so we can list users,
           // use them in Security and Firebase Rules, and show profiles
+          console.log("!profileCheck.profileExist",!profileCheck.profileExist);
+          console.log("profileCheck.profileExist",profileCheck.profileExist);
+
           ref.child(authData.uid).set({
             profileExist: true,
             provider: authData.provider,
