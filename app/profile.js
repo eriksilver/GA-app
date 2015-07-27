@@ -26,6 +26,7 @@ angular.module('GA_Dashboard')
       //make data available in $scope to display in the view
       $scope.userEmail = userData.email;
       $scope.userName = userData.name;
+      $scope.userUrl = userData.webProperty;
 
       //using $scope.$apply() to make sure data fills in view;
       //otherwise it was requiring a click in the form element to populate

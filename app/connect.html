@@ -2,13 +2,27 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <h2>Welcome, User </h2>
+        <h2>Welcome, <span >{{userName}}</span> </h2>
         <h4>Connect your Google Analytics Account</h4>
+                <br>
         <div class="input-group-lg">
+          <!-- Web property input -->
+          <h5>Enter your website address</h5>
+          <label for="inputProperty" class="sr-only">Web Property</label>
+          <input ng-model="userProperty" type="text" id="inputProperty"
+              class="form-control" placeholder="apple.com" required autofocus>
+
+          <!-- Email input for GA account -->
+          <h5>Confirm your Google Analytics account email</h5>
           <label for="inputEmail" class="sr-only">Email address</label>
-          <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span> -->
-          <input ng-model="userGA.email" type="email" id="inputEmail"
-                  class="form-control" placeholder="Google Analytics Email address" required autofocus>
+          <input ng-model="userEmailGA" type="email" id="inputEmail"
+              class="form-control" placeholder="{{userEmail}}" required autofocus>
+          <br>
+          <!-- Submit button -->
+          <button ng-click="userGA(userProperty, userEmailGA); authorizeGA()" id="auth-button"
+              type="submit" class="btn btn-lg btn-success btn-block" hidden>Go ></button>
+
+
         </div>
       </div>
     </div>

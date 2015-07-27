@@ -81,7 +81,9 @@ angular.module('GA_Dashboard')
             profileExist: false,
             provider: " ",
             email: $scope.newUser.email,
-            name: " "
+            name: " ",
+            emailGA: " ",
+            webProperty: " "
           });
         }
       });
