@@ -11,6 +11,18 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
 });
 
+myApp.controller("ApplicationController", [
+  "$log",
+  "$rootScope",
+  "$scope",
+  function($log, $rootScope, $scope) {
+    $scope.thingOnAppCtrl = {
+      foo: "asdfasdfasdf",
+    };
+    $log.info("From ApplicationController-1:", $scope.thingOnAppCtrl.foo);
+  }
+]);
+
 myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
 
   // For each user, create a profile object when Registered

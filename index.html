@@ -39,7 +39,7 @@
             <li role="presentation"><a ui-sref="connect">Connect GA Account</a></li>
             <li role="presentation"><a ui-sref="dashboard">Dashboard</a></li>
             <li role="presentation"><a ui-sref="profile">Profile</a></li>
-            <li role="presentation"><a ui-sref="test">GA Test page</a></li>
+            <!-- <li role="presentation"><a ui-sref="test">GA Test page</a></li> -->
 
         </ul>
         <main ui-view></main>
@@ -58,7 +58,30 @@
     <script src="/app/login.js"></script>
     <script src="/app/connect.js"></script>
     <script src="/app/profile.js"></script>
+    <script>
+    // <!-- Snippet to load the Embed API library -->
+    (function(w,d,s,g,js,fs){
+      g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+      js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+      js.src='https://apis.google.com/js/platform.js';
+      fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+    }(window,document,'script'));
+    </script>
+    <script>
+    gapi.analytics.ready(function() {
+      /**
+      * Authorize the user immediately if the user has already granted access.
+      * If no access has been created, render an authorize button inside the
+      * element with the ID "embed-api-auth-container".
+      */
 
+      gapi.analytics.auth.authorize({
+        container: 'embed-api-auth-container',
+        clientid: '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com'
+      });
+    });
+
+    </script>
 
   </body>
 </html>
