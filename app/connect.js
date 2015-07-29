@@ -43,96 +43,150 @@ angular.module('GA_Dashboard')
       })
     };
 
+    // <!-- Snippet to load the Embed API library -->
+    (function(w,d,s,g,js,fs){
+      g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+      js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+      js.src='https://apis.google.com/js/platform.js';
+      fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+    }(window,document,'script'));
 
-    //Start GA Auth
-    function authorize(event) {
-
-      // Replace with your client ID from the developer console.
-      var CLIENT_ID = '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com';
-
-      // Set authorized scope.
-      var SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
-
-      console.log("event authorized");
-
-      // Handles the authorization flow.
-      // `immediate` should be false when invoked from the button click.
-      var useImmdiate = event ? false : true;
-      var authData = {
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        immediate: useImmdiate
-      };
-
-      gapi.auth.authorize(authData, function(response) {
-        var authButton = document.getElementById('auth-button');
-        if (response.error) {
-          authButton.hidden = false;
-        }
-        else {
-          authButton.hidden = true;
-          listProperties();
-        }
-      });
-      console.log("authdata completed");
-    }
-
-
-    /*
-     * Note: This code assumes you have an authorized Analytics client object.
-     * See the Web Property Developer Guide for details.
-     */
-
-    /*
-     * Example 1:
-     * Requests a list of all properties for the authorized user.
-     */
-     function listProperties() {
-       // Load the Google Analytics client library.
-       gapi.client.load('analytics', 'v3').then(function() {
-
-         // Get a list of all web properties for this account
-         var request = gapi.client.analytics.management.webproperties.list({
-           'accountId': '2209662'
-         });
-         request.execute(printProperties);
-       });
-     }
-    /*
-     * Example 2:
-     * The results of the list method are passed as the results object.
-     * The following code shows how to iterate through them.
-     */
-    function printProperties(results) {
-      console.log("results object",results);
-      if (results && !results.error) {
-        var properties = results.items;
-        for (var i = 0, property; property = properties[i]; i++) {
-          console.log('Account Id: ' + property.accountId);
-          console.log('Property Id: ' + property.id);
-          console.log('Property Name: ' + property.name);
-          console.log('Property Profile Count: ' + property.profileCount);
-          console.log('Property Industry Vertical: ' + property.industryVertical);
-          console.log('Property Internal Id: ' + property.internalWebPropertyId);
-          console.log('Property Level: ' + property.level);
-          if (property.websiteUrl) {
-            console.log('Property URL: ' + property.websiteUrl);
-          }
-
-          console.log('Created: ' + property.created);
-          console.log('Updated: ' + property.updated);
-        }
-      }
-    }
-
-    console.log("before event listener");
-    // Add an event listener to the 'auth-button'.
-    //document.getElementById('auth-button').addEventListener('click', authorize);
-
-    $scope.authorizeGA= function () {
+    $scope.authorizeGA = function () {
       console.log("authorizeGA fn running");
 
-      authorize();
+      // <!-- When the library is fully loaded, any callbacks passed to gapi.analytics.ready will be invoked -->
+      gapi.analytics.ready(function() {
+        console.log("analytics fn ready");
+        /**
+         * Authorize the user immediately if the user has already granted access.
+         * If no access has been created, render an authorize button inside the
+         * element with the ID "embed-api-auth-container".
+         */
+        gapi.analytics.auth.authorize({
+          container: 'embed-api-auth-container',
+          clientid: '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com'
+        });
+
+
+        /**
+         * Create a new ViewSelector instance to be rendered inside of an
+         * element with the id "view-selector-container".
+         */
+        var viewSelector = new gapi.analytics.ViewSelector({
+          container: 'view-selector-container'
+        });
+
+        // Render the view selector to the page.
+        viewSelector.execute();
+
+        /**
+         * Create a table chart showing top browsers for users to interact with.
+         * Clicking on a row in the table will update a second timeline chart with
+         * data from the selected browser.
+         */
+        var mainChart = new gapi.analytics.googleCharts.DataChart({
+          query: {
+            'dimensions': 'ga:mobileDeviceInfo,ga:source',
+            'metrics': 'ga:sessions,ga:pageviews,ga:sessionDuration',
+            'sort': '-ga:pageviews',
+            'segment': 'gaid::-14',
+            'max-results': '40'
+          },
+          chart: {
+            type: 'TABLE',
+            container: 'main-chart-container',
+            options: {
+              width: '100%'
+            }
+          }
+        });
+
+
+        /**
+         * Create a timeline chart showing sessions over time for the browser the
+         * user selected in the main chart.
+         */
+        var breakdownChart = new gapi.analytics.googleCharts.DataChart({
+          query: {
+            'dimensions': 'ga:date',
+            'metrics': 'ga:sessions',
+            'start-date': '7daysAgo',
+            'end-date': 'yesterday'
+          },
+          chart: {
+            type: 'LINE',
+            container: 'breakdown-chart-container',
+            options: {
+              width: '100%'
+            }
+          }
+        });
+
+
+        /**
+         * Store a refernce to the row click listener variable so it can be
+         * removed later to prevent leaking memory when the chart instance is
+         * replaced.
+         */
+        var mainChartRowClickListener;
+
+
+        /**
+         * Update both charts whenever the selected view changes.
+         */
+        viewSelector.on('change', function(ids) {
+          var options = {query: {ids: ids}};
+
+          // Clean up any event listeners registered on the main chart before
+          // rendering a new one.
+          if (mainChartRowClickListener) {
+            google.visualization.events.removeListener(mainChartRowClickListener);
+          }
+
+          mainChart.set(options).execute();
+          breakdownChart.set(options);
+
+          // Only render the breakdown chart if a browser filter has been set.
+          if (breakdownChart.get().query.filters) breakdownChart.execute();
+        });
+
+
+        /**
+         * Each time the main chart is rendered, add an event listener to it so
+         * that when the user clicks on a row, the line chart is updated with
+         * the data from the browser in the clicked row.
+         */
+        mainChart.on('success', function(response) {
+
+          var chart = response.chart;
+          var dataTable = response.dataTable;
+
+          // Store a reference to this listener so it can be cleaned up later.
+          mainChartRowClickListener = google.visualization.events
+              .addListener(chart, 'select', function(event) {
+
+            // When you unselect a row, the "select" event still fires
+            // but the selection is empty. Ignore that case.
+            if (!chart.getSelection().length) return;
+
+            var row =  chart.getSelection()[0].row;
+            var browser =  dataTable.getValue(row, 0);
+            var options = {
+              query: {
+                filters: 'ga:browser==' + browser
+              },
+              chart: {
+                options: {
+                  title: browser
+                }
+              }
+            };
+
+            breakdownChart.set(options).execute();
+          });
+        });
+
+      });
 
     }; //end authorizeGA
 

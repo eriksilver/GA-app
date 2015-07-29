@@ -19,9 +19,15 @@
               class="form-control" placeholder="{{userEmail}}" required autofocus>
           <br>
           <!-- Submit button -->
-          <button ng-click="userGA(userProperty, userEmailGA); authorizeGA()" id="auth-button"
-              type="submit" class="btn btn-lg btn-success btn-block" hidden>Go ></button>
+          <button id="auth-button" hidden>Authorize</button>
+          <button ng-click="authorizeGA()"
+              type="submit" class="btn btn-lg btn-success btn-block">Go ></button>
+            <!-- ng-click="userGA(userProperty, userEmailGA); authorizeGA()" -->
 
+            <div id="embed-api-auth-container"></div>
+            <div id="view-selector-container"></div>
+            <div id="main-chart-container"></div>
+            <div id="breakdown-chart-container"></div>
 
         </div>
       </div>
