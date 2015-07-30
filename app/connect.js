@@ -41,10 +41,9 @@ angular.module('GA_Dashboard')
 
       gapi.analytics.ready(function() {
 
-    // <!-- When the library is fully loaded, any callbacks passed to gapi.analytics.ready will be invoked -->
-    // gapi.analytics.ready(function() {
+      // <!-- When the library is fully loaded, any callbacks passed to gapi.analytics.ready will be invoked -->
+      // gapi.analytics.ready(function() {
       console.log("analytics fn ready");
-
 
       /**
       * Create a new ViewSelector instance to be rendered inside of an
