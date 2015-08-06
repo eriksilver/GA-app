@@ -6,13 +6,15 @@ angular.module('GA_Dashboard')
 // }]);
 
 .controller("ConnectCtrl", [
-  "$log",
-  "$scope", "$rootScope", "$firebaseAuth",
-  function($log, $scope, $rootScope, $firebaseAuth) {
+  "$log","$scope", "$rootScope", "$firebaseAuth", "sharedProperties",
+  function($log, $scope, $rootScope, $firebaseAuth, sharedProperties) {
       $log.info("ConnectCtrl ran");
 
       //test of scope is transferring down from parent ApplicationController
-      $log.info($scope.thingOnAppCtrl.foo);
+      //$log.info("test data from parent controller:", $scope.thingOnAppCtrl.foo);
+
+
+      $log.info("In ConnectCtrl-sharedProperties.Property1:", sharedProperties.Property1);
 
       //Snippet to pull userName - maybe make into service?
       //pull out UID from $rootScope currentUser

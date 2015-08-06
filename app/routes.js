@@ -13,7 +13,7 @@ angular.module('GA_Dashboard')
       .state('welcome', {
         url: '/',
         templateUrl: 'app/welcome.html',
-        controller: 'ApplicationController', 
+        //controller: 'ApplicationController',
         data: {
           requireLogin: false
         }
@@ -28,9 +28,10 @@ angular.module('GA_Dashboard')
       })
       //YES login required
       .state('connect', {
+        controller: 'ConnectCtrl',
+        //parent: 'welcome',
         url: '/connect',
         templateUrl: 'app/connect.html',
-        controller: 'ConnectCtrl',
         data: {
           requireLogin: true
         }

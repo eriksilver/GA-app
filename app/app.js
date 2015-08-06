@@ -11,17 +11,25 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
 });
 
-myApp.controller("ApplicationController", [
-  "$log",
-  "$rootScope",
-  "$scope",
-  function($log, $rootScope, $scope) {
-    $scope.thingOnAppCtrl = {
-      foo: "asdfasdfasdf",
-    };
-    $log.info("From ApplicationController-1:", $scope.thingOnAppCtrl.foo);
-  }
-]);
+// myApp.controller("ApplicationController", [
+//   "$log",
+//   "$rootScope",
+//   "$scope",
+//   function($log, $rootScope, $scope) {
+//     $scope.thingOnAppCtrl = {
+//       foo: "asdfasdfasdf",
+//     };
+//     $log.info("From ApplicationController-Appjs:", $scope.thingOnAppCtrl.foo);
+//   }
+// ]);
+
+
+myApp.service('sharedProperties', function () {
+  var property = { Property1: 'First' };
+
+  return property;
+  $log.info("From sharedProperties service:", property);
+});
 
 myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
 

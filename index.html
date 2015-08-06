@@ -59,6 +59,7 @@
     <script src="/app/connect.js"></script>
     <script src="/app/profile.js"></script>
     <script>
+    console.log("GA authorize 1st ran");
     // <!-- Snippet to load the Embed API library -->
     (function(w,d,s,g,js,fs){
       g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
@@ -66,8 +67,7 @@
       js.src='https://apis.google.com/js/platform.js';
       fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
     }(window,document,'script'));
-    </script>
-    <script>
+
     gapi.analytics.ready(function() {
       /**
       * Authorize the user immediately if the user has already granted access.
@@ -79,6 +79,7 @@
         container: 'embed-api-auth-container',
         clientid: '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com'
       });
+      console.log("GA authorize ran");
     });
 
     </script>
