@@ -27,16 +27,6 @@ angular.module('GA_Dashboard')
         }
       })
       //YES login required
-      .state('connect', {
-        controller: 'ConnectCtrl',
-        //parent: 'welcome',
-        url: '/connect',
-        templateUrl: 'app/connect.html',
-        data: {
-          requireLogin: true
-        }
-      })
-      //YES login required
       .state('dashboard', {
         url: '/dashboard',
         templateUrl: 'app/dashboard.html',
