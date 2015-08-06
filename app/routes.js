@@ -30,7 +30,7 @@ angular.module('GA_Dashboard')
       .state('dashboard', {
         url: '/dashboard',
         templateUrl: 'app/dashboard.html',
-        // controller: 'ConnectCtrl', //update controller
+        controller: 'DashboardCtrl', 
         data: {
           requireLogin: true
         }
