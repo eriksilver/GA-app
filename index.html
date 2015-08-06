@@ -43,6 +43,10 @@
 
         </ul>
         <main ui-view></main>
+        <section id="auth-button"></section>
+        <section id="view-selector"></section>
+        <section id="timeline"></section>
+
     </div> <!--container-->
 
 
@@ -53,34 +57,24 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
     <!-- JS files -->
+    <script>
+    (function(w,d,s,g,js,fjs){
+      g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+      js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+      js.src='https://apis.google.com/js/platform.js';
+      fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+    }(window,document,'script'));
+    </script>
+
     <script src="/app/app.js"></script>
     <script src="/app/routes.js"></script>
     <script src="/app/login.js"></script>
     <script src="/app/connect.js"></script>
     <script src="/app/profile.js"></script>
+
+
+    <!-- When the library is fully loaded, any callbacks passed to gapi.analytics.ready will be invoked -->
     <script>
-    console.log("GA authorize 1st ran");
-    // <!-- Snippet to load the Embed API library -->
-    (function(w,d,s,g,js,fs){
-      g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
-      js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
-      js.src='https://apis.google.com/js/platform.js';
-      fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
-    }(window,document,'script'));
-
-    gapi.analytics.ready(function() {
-      /**
-      * Authorize the user immediately if the user has already granted access.
-      * If no access has been created, render an authorize button inside the
-      * element with the ID "embed-api-auth-container".
-      */
-
-      gapi.analytics.auth.authorize({
-        container: 'embed-api-auth-container',
-        clientid: '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com'
-      });
-      console.log("GA authorize ran");
-    });
 
     </script>
 

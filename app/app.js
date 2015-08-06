@@ -24,11 +24,12 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 // ]);
 
 
-myApp.service('sharedProperties', function () {
-  var property = { Property1: 'First' };
+myApp.service('gaAuth', function () {
+  //var startAuth = function () {
+    console.log("begin gaAuth service");
 
-  return property;
-  $log.info("From sharedProperties service:", property);
+
+  console.log("end gaAuth service:");
 });
 
 myApp.run(["$rootScope", "$state", function ($rootScope, $state) {

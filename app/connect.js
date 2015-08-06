@@ -6,15 +6,15 @@ angular.module('GA_Dashboard')
 // }]);
 
 .controller("ConnectCtrl", [
-  "$log","$scope", "$rootScope", "$firebaseAuth", "sharedProperties",
-  function($log, $scope, $rootScope, $firebaseAuth, sharedProperties) {
+  "$log","$scope", "$rootScope", "$firebaseAuth", "gaAuth",
+  function($log, $scope, $rootScope, $firebaseAuth, gaAuth) {
       $log.info("ConnectCtrl ran");
 
       //test of scope is transferring down from parent ApplicationController
       //$log.info("test data from parent controller:", $scope.thingOnAppCtrl.foo);
 
 
-      $log.info("In ConnectCtrl-sharedProperties.Property1:", sharedProperties.Property1);
+      //$log.info("In ConnectCtrl-sharedProperties.Property1:", sharedProperties.Property1);
 
       //Snippet to pull userName - maybe make into service?
       //pull out UID from $rootScope currentUser
@@ -40,131 +40,75 @@ angular.module('GA_Dashboard')
         $scope.$apply();
       });
 
-
+      //call GAauth service
+      //gaAuth.this;
       gapi.analytics.ready(function() {
 
-      // <!-- When the library is fully loaded, any callbacks passed to gapi.analytics.ready will be invoked -->
-      // gapi.analytics.ready(function() {
-      console.log("analytics fn ready");
+        // Step 3: Authorize the user.
 
-      /**
-      * Create a new ViewSelector instance to be rendered inside of an
-      * element with the id "view-selector-container".
-      */
-      var viewSelector = new gapi.analytics.ViewSelector({
-        container: 'view-selector-container'
-      });
+        var CLIENT_ID = '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com';
+        //One-click auth button needs passed in a container reference and your client ID
+        gapi.analytics.auth.authorize({
+          container: 'auth-button',
+          clientid: CLIENT_ID,
+        });
 
-      // Render the view selector to the page.
-      viewSelector.execute();
+        // Step 4: Create the view selector.
+        //The View selector component can be used to obtain the ids of a particular view,
+        //so you can run a report for it.
+        //To create a view selector, all you need is the container reference (html id in Step 1).
+        //Note This creates the view selector component, but it doesn't yet render it on the page.
+        //To do that you need to call execute(), which is handled in step 6.
 
-      /**
-      * Create a table chart showing top browsers for users to interact with.
-      * Clicking on a row in the table will update a second timeline chart with
-      * data from the selected browser.
-      */
-      var mainChart = new gapi.analytics.googleCharts.DataChart({
-        query: {
-          'dimensions': 'ga:mobileDeviceInfo,ga:source',
-          'metrics': 'ga:sessions,ga:pageviews,ga:sessionDuration',
-          'sort': '-ga:pageviews',
-          'segment': 'gaid::-14',
-          'max-results': '40'
-        },
-        chart: {
-          type: 'TABLE',
-          container: 'main-chart-container',
-          options: {
-            width: '100%'
+        var viewSelector = new gapi.analytics.ViewSelector({
+          container: 'view-selector'
+        });
+
+        // Step 5: Create the timeline chart.
+        // The Embed API provides you with a chart component that is both a Google chart as well as a report object
+        // in one. This greatly simplifies the process for displaying data as the chart object will run your reports
+        // behind the scene and automatically update itself with the results.
+        // To create a chart component you'll need to specify the API query parameters as well as the chart options.
+        // Within the chart options is a reference to the ID of the container you created in step 1.
+        // Note: As with the view selector, this creates the chart component but to render it to the page you
+        // need to call execute(), which will be explained in the next step
+
+        var timeline = new gapi.analytics.googleCharts.DataChart({
+          reportType: 'ga',
+          query: {
+            'dimensions': 'ga:date',
+            'metrics': 'ga:sessions, ga:pageviews',
+            'start-date': '90daysAgo',
+            'end-date': 'yesterday',
+          },
+          chart: {
+            type: 'LINE',
+            container: 'timeline'
           }
-        }
-      });
+        });
 
+        // Step 6: Hook up the components to work together.
+        //
+        // Embed API components emit events when various things happen such as successful authorization,
+        // selecting a new view, or a chart being fully rendered.
+        //
+        // The example application in this guide waits to render the view selector until after authorization
+        // has happened, and it updates the timeline chart whenever a new view is selected from the view selector
 
-      /**
-      * Create a timeline chart showing sessions over time for the browser the
-      * user selected in the main chart.
-      */
-      var breakdownChart = new gapi.analytics.googleCharts.DataChart({
-        query: {
-          'dimensions': 'ga:date',
-          'metrics': 'ga:sessions',
-          'start-date': '7daysAgo',
-          'end-date': 'yesterday'
-        },
-        chart: {
-          type: 'LINE',
-          container: 'breakdown-chart-container',
-          options: {
-            width: '100%'
-          }
-        }
-      });
+        gapi.analytics.auth.on('success', function(response) {
+          viewSelector.execute();
+        });
 
-
-      /**
-      * Store a refernce to the row click listener variable so it can be
-      * removed later to prevent leaking memory when the chart instance is
-      * replaced.
-      */
-      var mainChartRowClickListener;
-
-
-      /**
-      * Update both charts whenever the selected view changes.
-      */
-      viewSelector.on('change', function(ids) {
-        var options = {query: {ids: ids}};
-
-        // Clean up any event listeners registered on the main chart before
-        // rendering a new one.
-        if (mainChartRowClickListener) {
-          google.visualization.events.removeListener(mainChartRowClickListener);
-        }
-
-        mainChart.set(options).execute();
-        breakdownChart.set(options);
-
-        // Only render the breakdown chart if a browser filter has been set.
-        if (breakdownChart.get().query.filters) breakdownChart.execute();
-      });
-
-
-      /**
-      * Each time the main chart is rendered, add an event listener to it so
-      * that when the user clicks on a row, the line chart is updated with
-      * the data from the browser in the clicked row.
-      */
-      mainChart.on('success', function(response) {
-
-        var chart = response.chart;
-        var dataTable = response.dataTable;
-
-        // Store a reference to this listener so it can be cleaned up later.
-        mainChartRowClickListener = google.visualization.events
-        .addListener(chart, 'select', function(event) {
-
-          // When you unselect a row, the "select" event still fires
-          // but the selection is empty. Ignore that case.
-          if (!chart.getSelection().length) return;
-
-          var row =  chart.getSelection()[0].row;
-          var browser =  dataTable.getValue(row, 0);
-          var options = {
+        viewSelector.on('change', function(ids) {
+          var newIds = {
             query: {
-              filters: 'ga:browser==' + browser
-            },
-            chart: {
-              options: {
-                title: browser
-              }
+              ids: ids
             }
-          };
-
-          breakdownChart.set(options).execute();
+          }
+          timeline.set(newIds).execute();
         });
       });
 
-    });
+      $log.info("end ConnectCtrl");
 
 }]); //end ConnectCtrl
