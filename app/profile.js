@@ -2,8 +2,8 @@
 angular.module('GA_Dashboard')
 
 .controller("ProfileCtrl", [
-  "$scope", "$firebaseArray", "$state", "$rootScope",
-  function($scope, $firebaseArray, $state, $rootScope) {
+  "$scope", "$firebaseArray", "$state", "$rootScope","$log",
+  function($scope, $firebaseArray, $state, $rootScope, $log) {
     ////NOTES
     // current user data is in rootscope
     // put user data in local variable and use $scope to show in view
@@ -21,7 +21,7 @@ angular.module('GA_Dashboard')
       var userSnapshot = snapshot.child(userID);
       //get data from that snapshot
       var userData = userSnapshot.val();
-      console.log("current userData", userData);
+      $log.info("current userData:", userData);
 
       //make data available in $scope to display in the view
       $scope.userEmail = userData.email;

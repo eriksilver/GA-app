@@ -7,9 +7,9 @@ angular.module('GA_Dashboard')
 // }]);
 
 .controller("LoginCtrl", [
-  "$scope", "$firebaseAuth", "$state",
-  function($scope, $firebaseAuth, $state) {
-    console.log("LoginCtrl ran");
+  "$scope", "$firebaseAuth", "$state","$log",
+  function($scope, $firebaseAuth, $state, $log) {
+    $log.log("LoginCtrl ran");
     var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
     $scope.authObj = $firebaseAuth(ref);
 
@@ -25,8 +25,8 @@ angular.module('GA_Dashboard')
       }).then(function(authData) {
         //?? currentUser picks up only email from authData
         $scope.currentUser = authData.password.email;
-          console.log("Logged in as:", authData.uid);
-          console.log("Authenticated successfully with payload:", authData);
+          $log.info("Logged in as:", authData.uid);
+          $log.info("Authenticated successfully with payload:", authData);
 
         // //with successful login, direct to Connect page
         // $state.go("connect");
@@ -35,16 +35,16 @@ angular.module('GA_Dashboard')
       }).catch(function(error) {
         switch (error.code) {
           case "INVALID_EMAIL":
-          console.log("The specified user account email is invalid.");
+          $log.error("The specified user account email is invalid.");
           break;
           case "INVALID_PASSWORD":
-          console.log("The specified user account password is incorrect.");
+          $log.error("The specified user account password is incorrect.");
           break;
           case "INVALID_USER":
-          console.log("The specified user account does not exist.");
+          $log.error("The specified user account does not exist.");
           break;
           default:
-          console.log("Error logging user in:", error);
+          $log.error("Error logging user in:", error);
         };
       });
 
@@ -63,17 +63,17 @@ angular.module('GA_Dashboard')
         if (error) {
           switch (error.code) {
             case "EMAIL_TAKEN":
-            console.log("The new user account cannot be created because the email is already in use.");
+            $log.error("The new user account cannot be created because the email is already in use.");
             break;
             case "INVALID_EMAIL":
-            console.log("The specified email is not a valid email.");
+            $log.error("The specified email is not a valid email.");
             break;
             default:
-            console.log("Error creating user:", error);
+            $log.error("Error creating user:", error);
           }
         } else {
           //note userData consists solely of UID
-          console.log("Successfully created user account with uid:", userData);
+          $log.info("Successfully created user account with uid:", userData);
 
           //save user at Registration with UID and empty object
           var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
@@ -117,5 +117,5 @@ angular.module('GA_Dashboard')
       });
     });
 
-    console.log("user authed?-loginjs:", gapi.analytics.auth.isAuthorized());
+    $log.info("user authed?-loginjs:", gapi.analytics.auth.isAuthorized());
 }]);

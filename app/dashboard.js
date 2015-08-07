@@ -4,9 +4,9 @@ angular.module('GA_Dashboard')
 // }]);
 
 .controller("DashboardCtrl", [
-  "$scope", "$firebaseAuth", "$state",
-  function($scope, $firebaseAuth, $state) {
-    console.log("DashboardCtrl ran");
+  "$scope", "$firebaseAuth", "$state","$log",
+  function($scope, $firebaseAuth, $state, $log) {
+    $log.log("DashboardCtrl ran");
 
     // Step 4: Create the view selector.
     // The View selector component can be used to obtain the ids of a particular view,
@@ -15,10 +15,10 @@ angular.module('GA_Dashboard')
     // Note This creates the view selector component, but it doesn't yet render it on the page.
     // To do that you need to call execute(), which is handled in step 6.
 
-    console.log("user authed?", gapi.analytics.auth.isAuthorized());
+    $log.info("user authed?", gapi.analytics.auth.isAuthorized());
 
     gapi.analytics.ready(function() {
-      console.log("gapi ready go - dashboardjs");
+      // $log.info("gapi ready go - dashboardjs");
 
     var viewSelector = new gapi.analytics.ViewSelector({
       container: 'view-selector'
@@ -54,7 +54,7 @@ angular.module('GA_Dashboard')
     //
     // The example application in this guide waits to render the view selector until after authorization
     // has happened, and it updates the timeline chart whenever a new view is selected from the view selector
-    
+
     viewSelector.execute();
 
     viewSelector.on('change', function(ids) {

@@ -5,7 +5,7 @@ angular.module('GA_Dashboard')
   .config(function ($stateProvider,$urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode({
       enabled: true,
-      // requireBase: false
+
     });
     // For any unmatched url, send to /
     // $urlRouterProvider.otherwise('/');
@@ -30,7 +30,7 @@ angular.module('GA_Dashboard')
       .state('dashboard', {
         url: '/dashboard',
         templateUrl: 'app/dashboard.html',
-        controller: 'DashboardCtrl', 
+        controller: 'DashboardCtrl',
         data: {
           requireLogin: true
         }

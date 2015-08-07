@@ -24,22 +24,20 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 // ]);
 
 
-myApp.service('gaAuth', function () {
-  //var startAuth = function () {
-    console.log("begin gaAuth service");
+myApp.service('gaAuth', ['$log', function ($log) {
+    $log.info("begin gaAuth service");
 
 
-  console.log("end gaAuth service:");
-});
+    $log.info("end gaAuth service:");
+}]);
 
-myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
+myApp.run(["$rootScope", "$state","$log", function ($rootScope, $state, $log) {
 
   // For each user, create a profile object when Registered
   // Separate when user registers -UID is created
   // vs When user logs in - authData is created
   // When User is authorized, check if they have a Profile
   // If not, save their authdata as a User
-
 
   //Uses the onAuth() method to listen for changes in user authentication state
   function authDataCallback(authData) {
@@ -74,14 +72,14 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
           } //end getName
         } //end Profile SAVE
       }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
+        $log.info("The read failed: " + errorObject.code);
       });
 
       //if authData is not null; then we have a User logged in via Firebase authentication
       //Here we assign the logged in user to the rootscope.currentUser
       $rootScope.currentUser = authData;
       //Console log to confirm a user is logged in
-      console.log("***User " + authData.uid + " is logged in with " + authData.provider);
+      $log.info("***User " + authData.uid + " is logged in with " + authData.provider);
       //Could be more granular on what properties we want current user to have
       // $rootScope.currentUser = {
       //   id: authData
@@ -90,7 +88,7 @@ myApp.run(["$rootScope", "$state", function ($rootScope, $state) {
     } else {
       $rootScope.currentUser = null;
       //Console log to confirm user is logged out
-      console.log("***User is logged out");
+      $log.info("***User is logged out");
     } //end If(authdata)
   } //end authDataCallback
 
