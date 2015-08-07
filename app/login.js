@@ -14,7 +14,6 @@ angular.module('GA_Dashboard')
     $scope.authObj = $firebaseAuth(ref);
 
     $scope.currentUser = null;
-    // console.log("here is scope.authObj:", $scope.authObj);
 
     //login method
     $scope.login = function () {
@@ -25,11 +24,11 @@ angular.module('GA_Dashboard')
       }).then(function(authData) {
         //?? currentUser picks up only email from authData
         $scope.currentUser = authData.password.email;
-          $log.info("Logged in as:", authData.uid);
+          // $log.info("Logged in as:", authData.uid);
           $log.info("Authenticated successfully with payload:", authData);
 
-        // //with successful login, direct to Connect page
-        // $state.go("connect");
+        //with successful login, direct to Connect page
+        $state.go("dashboard");
 
         //catch method used for error handling
       }).catch(function(error) {
@@ -102,20 +101,4 @@ angular.module('GA_Dashboard')
     };
 
 
-
-
-
-    ///Google Analytics Auth
-    gapi.analytics.ready(function() {
-      // Step 3: Authorize the user.
-
-      var CLIENT_ID = '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com';
-      //One-click auth button needs passed in a container reference and your client ID
-      gapi.analytics.auth.authorize({
-        container: 'auth-button',
-        clientid: CLIENT_ID,
-      });
-    });
-
-    $log.info("user authed?-loginjs:", gapi.analytics.auth.isAuthorized());
 }]);

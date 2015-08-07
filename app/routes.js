@@ -26,7 +26,6 @@ angular.module('GA_Dashboard')
           requireLogin: false
         }
       })
-      //YES login required
       .state('dashboard', {
         url: '/dashboard',
         templateUrl: 'app/dashboard.html',
@@ -35,7 +34,6 @@ angular.module('GA_Dashboard')
           requireLogin: true
         }
       })
-      //YES login required
       .state('profile', {
         url: '/profile',
         templateUrl: 'app/profile.html',

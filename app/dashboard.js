@@ -15,7 +15,22 @@ angular.module('GA_Dashboard')
     // Note This creates the view selector component, but it doesn't yet render it on the page.
     // To do that you need to call execute(), which is handled in step 6.
 
-    $log.info("user authed?", gapi.analytics.auth.isAuthorized());
+    // $log.info("user authed?", gapi.analytics.auth.isAuthorized());
+
+    ///Google Analytics Auth
+    gapi.analytics.ready(function() {
+      // Step 3: Authorize the user.
+
+      var CLIENT_ID = '219791845501-it7kgsija2fr04vvcf2lu7ne6pfq6r7a.apps.googleusercontent.com';
+      //One-click auth button needs passed in a container reference and your client ID
+      gapi.analytics.auth.authorize({
+        container: 'auth-button',
+        clientid: CLIENT_ID,
+      });
+    });
+
+    $log.info("Is user GA authed?(login.js):", gapi.analytics.auth.isAuthorized());
+
 
     gapi.analytics.ready(function() {
       // $log.info("gapi ready go - dashboardjs");
