@@ -24,14 +24,17 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 // ]);
 
 
-myApp.service('gaAuth', ['$log', function ($log) {
-    $log.info("begin gaAuth service");
+myApp.service('currentUser', ['$log', function ($log) {
+    $log.info("begin currentUser service");
+    var currentUser = {
+      uid: null
+    };
 
-
-    $log.info("end gaAuth service:");
+    return currentUser;
+    $log.info("end currentUser service:");
 }]);
 
-myApp.run(["$rootScope", "$state","$log", function ($rootScope, $state, $log) {
+myApp.run(["$rootScope", "$state", "$log", "currentUser", function ($rootScope, $state, $log, currentUser) {
 
   // For each user, create a profile object when Registered
   // Separate when user registers -UID is created
@@ -76,19 +79,19 @@ myApp.run(["$rootScope", "$state","$log", function ($rootScope, $state, $log) {
       });
 
       //if authData is not null; then we have a User logged in via Firebase authentication
-      //Here we assign the logged in user to the rootscope.currentUser
-      $rootScope.currentUser = authData;
+      //Here we assign the logged in user to the currentUser service
+      currentUser.uid = authData.uid;
+      $log.info("service test - current user id:",currentUser.uid);
       //Console log to confirm a user is logged in
       $log.info("***User " + authData.uid + " is logged in with " + authData.provider);
-      //Could be more granular on what properties we want current user to have
-      // $rootScope.currentUser = {
-      //   id: authData
 
-    //if authData is null (user is logged out); be explicit with rootscope.currentUser
+    //if authData is null (user is logged out); be explicit with currentUser service
     } else {
-      $rootScope.currentUser = null;
+      currentUser.uid = null;
       //Console log to confirm user is logged out
       $log.info("***User is logged out");
+      $log.info("service test - current user id null:",currentUser.uid);
+
     } //end If(authdata)
   } //end authDataCallback
 
@@ -97,12 +100,12 @@ myApp.run(["$rootScope", "$state","$log", function ($rootScope, $state, $log) {
   ref.onAuth(authDataCallback);
 
   //subscribes to $stateChangeStart to inspect for requireLogin property
+  //default for UI router to fire this at the $rootScope level
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-    // console.log("$on.$stateChangeStart ran");
     //checks for data property "requirelogin" (true/false) in the stateprovider
     var requireLogin = toState.data.requireLogin;
-    //true if $rootScope.currentUser is defined and is not null
-    var currentUserExists = angular.isDefined($rootScope.currentUser) && $rootScope.currentUser !== null;
+    //true if currentUser.uid is defined and is not null
+    var currentUserExists = angular.isDefined(currentUser.uid) && currentUser.uid !== null;
     //true if requireLogin is required and user is logged out (currentUser is null)
     var shouldRedirectToLogin = requireLogin && !currentUserExists;
     //if true, direct to login page

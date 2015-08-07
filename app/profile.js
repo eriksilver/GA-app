@@ -2,15 +2,15 @@
 angular.module('GA_Dashboard')
 
 .controller("ProfileCtrl", [
-  "$scope", "$firebaseArray", "$state", "$rootScope","$log",
-  function($scope, $firebaseArray, $state, $rootScope, $log) {
+  "$scope", "$rootScope","$firebaseArray", "$state", "$log", "currentUser",
+  function($scope, $rootScope, $firebaseArray, $state, $log, currentUser) {
+    $log.info("ProfileCtrl ran test");
     ////NOTES
-    // current user data is in rootscope
+    // currentUser service stores user id (uid)
     // put user data in local variable and use $scope to show in view
-    // not sure if we want/need 3 way binding
 
-    //pull out UID from $rootScope currentUser
-    var userID = $rootScope.currentUser.uid
+    //get out UID from currentUser service
+    var userID = currentUser.uid;
 
     // Get a database reference to our users
     var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
