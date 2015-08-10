@@ -11,19 +11,6 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
 });
 
-// myApp.controller("ApplicationController", [
-//   "$log",
-//   "$rootScope",
-//   "$scope",
-//   function($log, $rootScope, $scope) {
-//     $scope.thingOnAppCtrl = {
-//       foo: "asdfasdfasdf",
-//     };
-//     $log.info("From ApplicationController-Appjs:", $scope.thingOnAppCtrl.foo);
-//   }
-// ]);
-
-
 myApp.service('currentUser', ['$log', function ($log) {
     $log.info("begin currentUser service");
     var currentUser = {

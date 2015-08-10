@@ -13,7 +13,7 @@ angular.module('GA_Dashboard')
     var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
     $scope.authObj = $firebaseAuth(ref);
 
-    $scope.currentUser = null;
+    //$scope.currentUser = null;
 
     //login method
     $scope.login = function () {
@@ -22,13 +22,10 @@ angular.module('GA_Dashboard')
         email    : $scope.newUser.email,
         password : $scope.newUser.password
       }).then(function(authData) {
-        //?? currentUser picks up only email from authData
-        $scope.currentUser = authData.password.email;
-          // $log.info("Logged in as:", authData.uid);
-          $log.info("Authenticated successfully with payload:", authData);
-
         //with successful login, direct to Connect page
         $state.go("dashboard");
+        // $log.info("Logged in as:", authData.uid);
+        $log.info("Authenticated successfully with payload:", authData);
 
         //catch method used for error handling
       }).catch(function(error) {
