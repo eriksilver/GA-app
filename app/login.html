@@ -4,12 +4,10 @@
     <div class="col-md-6">
       <div class="col-md-9">
 
-        <!-- SignIn Form -->
+        <!-- SIGN IN Form -->
         <!-- pass in variable if form is valid or invalid -->
-            <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+        <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
         <form class="form-signin" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate style="padding-right:20px; border-right: 1px solid #ccc;">
-
-          <!-- Form heading -->
           <h3>Sign in</h3>
 
           <!-- Email input -->
@@ -41,7 +39,7 @@
           </div>
 
           <!-- Submit buttons -->
-          <button ng-click="login(newUser.email, newUser.password)" type="submit" ng-disabled="userForm.$invalid" class="btn btn-lg btn-primary btn-block">Login</button>
+          <button ng-click="login(newUser.email, newUser.password)" type="submit" ng-disabled="userForm.$invalid" class="btn btn-lg btn-success btn-block">Login</button>
           <button ng-click="logout()" type="submit" class="btn btn-lg btn-danger btn-block">Logout</button>
 
         </form>
@@ -49,26 +47,26 @@
       </div> <!--col-md-9-->
     </div> <!--col-md-6-->
 
-    <!-- Register Form -->
+    <!-- REGISTER Form -->
     <div class="col-md-6">
       <div class="col-md-9">
 
-        <form class="form-signin" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
+        <form class="form-signin" name="formRegister" ng-submit="submitRegister(formRegister.$valid)" novalidate>
           <h3>Register</h3>
 
           <!-- First Name -->
           <div class="form-group input-group input-group-lg">
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <label for="firstName" class="sr-only">First Name</label>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
             <input
-            ng-model="newUser.email"
-            type="email"
-            id="inputEmail"
+            ng-model="userRegister.firstName"
+            type="text"
+            id="firstName"
             class="form-control"
-            placeholder="Email address"
+            placeholder="First name"
             required
             autofocus>
-            <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
+            <!-- <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p> -->
           </div>
 
           <!-- Email input -->
@@ -76,14 +74,14 @@
             <label for="inputEmail" class="sr-only">Email address</label>
             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
             <input
-            ng-model="newUser.email"
+            ng-model="userRegister.email"
             type="email"
             id="inputEmail"
             class="form-control"
             placeholder="Email address"
             required
             autofocus>
-            <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
+            <!-- <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p> -->
           </div>
 
           <!-- Password Input -->
@@ -91,7 +89,7 @@
             <label for="inputPassword" class="sr-only">Password</label>
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
             <input
-            ng-model="newUser.password"
+            ng-model="userRegister.password"
             type="password"
             id="inputPassword"
             class="form-control"
@@ -99,8 +97,7 @@
             required>
           </div>
 
-
-          <button ng-click="register(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-success btn-block">Register</button>
+          <button ng-click="submitRegister(userRegister.firstName, userRegister.email, userRegister.password)" type="submit" ng-disabled="formRegister.$invalid" class="btn btn-lg btn-primary btn-block">Register</button>
 
         </form>
 

@@ -10,11 +10,12 @@ angular.module('GA_Dashboard')
   "$scope", "$firebaseAuth", "$state","$log",
   function($scope, $firebaseAuth, $state, $log) {
     $log.log("LoginCtrl ran");
-    var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
-    $scope.authObj = $firebaseAuth(ref);
+
 
     //login method | submits form after iniital validation has occurred
     $scope.submitLogin = function (isValid) {
+      var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
+      $scope.authObj = $firebaseAuth(ref);
 
       // check to make sure the form is completely valid
       if (isValid) {
@@ -56,44 +57,54 @@ angular.module('GA_Dashboard')
 
 
 
-    //register user method
-    $scope.register = function () {
-      //use Firebase method createUser to add user with email & password credentials
-      //note this registed, NOT authenticated (logged in)
-      ref.createUser({
-        email    : $scope.newUser.email,
-        password : $scope.newUser.password
-      }, function(error, userData) {
-        if (error) {
-          switch (error.code) {
-            case "EMAIL_TAKEN":
-            $log.error("The new user account cannot be created because the email is already in use.");
-            break;
-            case "INVALID_EMAIL":
-            $log.error("The specified email is not a valid email.");
-            break;
-            default:
-            $log.error("Error creating user:", error);
-          }
-        } else {
-          //note userData consists solely of UID
-          $log.info("Successfully created user account with uid:", userData);
+    //login method | submits form after iniital validation has occurred
+    $scope.submitRegister = function (isValid) {
+      var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
 
-          //save user at Registration with UID and empty object
-          var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
-          ref.child("users").child(userData.uid).set({
-            profileExist: false,
-            provider: " ",
-            email: $scope.newUser.email,
-            name: " ",
-            emailGA: " ",
-            webProperty: " "
-          });
-        }
-      });
+      // check to make sure the form is completely valid
+      if (isValid) {
+        alert('our form is amazing');
 
-      $scope.resetForm ();
-    };
+        //use Firebase method createUser to add user with email & password credentials
+        //note this only give user a UID, no other info attached to user and NOT authenticated (logged in)
+        $log.info("$scope.userRegister.firstName-1",$scope.userRegister.firstName);
+
+        ref.createUser({
+          email    : $scope.userRegister.email,
+          password : $scope.userRegister.password
+        }, function(error, userData) {
+          if (error) {
+            switch (error.code) {
+              case "EMAIL_TAKEN":
+              $log.error("The new user account cannot be created because the email is already in use.");
+              break;
+              case "INVALID_EMAIL":
+              $log.error("The specified email is not a valid email.");
+              break;
+              default:
+              $log.error("Error creating user:", error);
+            }
+          } else {
+            //note userData consists solely of UID
+            $log.info("Successfully created user account with uid:", userData);
+
+            $log.info("$scope.userRegister.firstName-2",$scope.userRegister.firstName);
+            //save user at Registration with UID and empty object
+            var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
+
+            ref.child("users").child(userData.uid).set({
+              profileExist: true,
+              provider: " ",
+              email: $scope.userRegister.email,
+              name: $scope.userRegister.name
+            });
+          } //end function
+        }); //end createUser
+
+      } //end isValid
+
+      $scope.resetRegisterForm ();
+    }; //end submitRegister
 
     //logout user
     $scope.logout = function () {
@@ -101,9 +112,13 @@ angular.module('GA_Dashboard')
     };
 
     //resets newUser object
+    $scope.resetRegisterForm = function (name,email,password) {
+      $scope.userRegister = {name: '', email: '', password: ''};
+    };
+
+    //resets newUser object
     $scope.resetForm = function (email,password) {
       $scope.newUser = {email: '', password: ''};
     };
 
-
-}]);
+  }]); //end LoginCtrl
