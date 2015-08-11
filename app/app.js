@@ -4,7 +4,8 @@
 
 var myApp = angular.module('GA_Dashboard', [
   'ui.router',
-  'firebase'
+  'firebase',
+  'ngMessages'
 ]);
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {

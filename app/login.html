@@ -3,42 +3,109 @@
   <div class="row">
     <div class="col-md-6">
       <div class="col-md-9">
-        <form class="form-signin">
-          <!-- Form heading -->
-          <!-- <h1>Step 1.</h1> -->
-          <h3>Sign in</h3>
-          <!-- <h2 class="form-signin-heading" ng-if="$scope.currentUser">{{$scope.currentUser}}</h2> -->
-            <!-- Email input -->
-            <div class="form-group input-group input-group-lg">
-              <label for="inputEmail" class="sr-only">Email address</label>
-              <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-              <input ng-model="newUser.email" type="email" id="inputEmail"
-              class="form-control" placeholder="Email address" required autofocus>
-            </div>
-            <!-- Password Input -->
-            <div class="form-group input-group input-group-lg">
-              <label for="inputPassword" class="sr-only">Password</label>
-              <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-              <input ng-model="newUser.password" type="password" id="inputPassword"
-              class="form-control" placeholder="Password" required>
-            </div>
-            <!-- Remember me checkbox -->
-            <div class="checkbox">
-              <label><input type="checkbox">Remember Me</label>
-            </div>
-            <!-- Submit buttons -->
-            <button ng-click="login(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-            <button ng-click="register(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-success btn-block">Register</button>
-            <button ng-click="logout()" type="submit" class="btn btn-lg btn-danger btn-block">Logout</button>
 
-          </form>
-        </div>
-      </div>
-      <!--Used for two step login
-      <div class="col-md-6">
-      <h1>Step 2.</h1>
-      <h3>Access Your Google Analytics</h3>
-      <section id="auth-button"></section>
-    </div> -->
-  </div>
+        <!-- SignIn Form -->
+        <!-- pass in variable if form is valid or invalid -->
+            <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+        <form class="form-signin" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate style="padding-right:20px; border-right: 1px solid #ccc;">
+
+          <!-- Form heading -->
+          <h3>Sign in</h3>
+
+          <!-- Email input -->
+          <div class="form-group input-group input-group-lg">
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <input
+            ng-model="newUser.email"
+            type="email"
+            id="inputEmail"
+            class="form-control"
+            placeholder="Email address"
+            required
+            autofocus>
+            <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
+          </div>
+
+          <!-- Password Input -->
+          <div class="form-group input-group input-group-lg">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <input
+            ng-model="newUser.password"
+            type="password"
+            id="inputPassword"
+            class="form-control"
+            placeholder="Password"
+            required>
+          </div>
+
+          <!-- Submit buttons -->
+          <button ng-click="login(newUser.email, newUser.password)" type="submit" ng-disabled="userForm.$invalid" class="btn btn-lg btn-primary btn-block">Login</button>
+          <button ng-click="logout()" type="submit" class="btn btn-lg btn-danger btn-block">Logout</button>
+
+        </form>
+
+      </div> <!--col-md-9-->
+    </div> <!--col-md-6-->
+
+    <!-- Register Form -->
+    <div class="col-md-6">
+      <div class="col-md-9">
+
+        <form class="form-signin" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
+          <h3>Register</h3>
+
+          <!-- First Name -->
+          <div class="form-group input-group input-group-lg">
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <input
+            ng-model="newUser.email"
+            type="email"
+            id="inputEmail"
+            class="form-control"
+            placeholder="Email address"
+            required
+            autofocus>
+            <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
+          </div>
+
+          <!-- Email input -->
+          <div class="form-group input-group input-group-lg">
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <input
+            ng-model="newUser.email"
+            type="email"
+            id="inputEmail"
+            class="form-control"
+            placeholder="Email address"
+            required
+            autofocus>
+            <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
+          </div>
+
+          <!-- Password Input -->
+          <div class="form-group input-group input-group-lg">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <input
+            ng-model="newUser.password"
+            type="password"
+            id="inputPassword"
+            class="form-control"
+            placeholder="Password"
+            required>
+          </div>
+
+
+          <button ng-click="register(newUser.email, newUser.password)" type="submit" class="btn btn-lg btn-success btn-block">Register</button>
+
+        </form>
+
+      </div> <!--col-md-9-->
+    </div> <!--col-md-6-->
+
+</div>
 </div>
