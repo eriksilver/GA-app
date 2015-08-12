@@ -11,23 +11,46 @@ angular.module('GA_Dashboard')
   function($scope, $firebaseAuth, $state, $log) {
     $log.log("LoginCtrl ran");
 
+    //establish Firebase reference to be used by all functions in the controller
+    var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
+    $scope.authObj = $firebaseAuth(ref);
+
 
     //login method | submits form after iniital validation has occurred
     $scope.submitLogin = function (isValid) {
-      var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
-      $scope.authObj = $firebaseAuth(ref);
 
       // check to make sure the form is completely valid
       if (isValid) {
-        alert('our form is amazing');
+
         $scope.authObj.$authWithPassword({
-          email    : $scope.newUser.email,
-          password : $scope.newUser.password
+          email    : $scope.userLogin.email,
+          password : $scope.userLogin.password
         }).then(function(authData) {
-          //with successful login, direct to Connect page
-          $state.go("dashboard");
-          // $log.info("Logged in as:", authData.uid);
+          //with successful login, direct to Dashboard page
+          //$state.go("dashboard");
+
           $log.info("Authenticated successfully with payload:", authData);
+          // //create user profile with login authdata
+          // ref.child("users").child(authData.uid).set({
+          //   email: $scope.userLogin.email,
+          //   name: getName(authData),
+          //   profileExist: true,
+          //   provider: authData.provider, //authentication method, e.g. password
+          // });
+          //
+          // // find a suitable name for the user based on the meta info given by each provider
+          // function getName(authData) {
+          //   switch(authData.provider) {
+          //     case 'password':
+          //     return authData.password.email.replace(/@.*/, '');
+          //     // use below if twitter or facebook authentication is used
+          //     // case 'twitter':
+          //     // return authData.twitter.displayName;
+          //     // case 'facebook':
+          //     // return authData.facebook.displayName;
+          // }
+          // }
+
 
           //catch method used for error handling
         }).catch(function(error) {
@@ -59,16 +82,15 @@ angular.module('GA_Dashboard')
 
     //login method | submits form after iniital validation has occurred
     $scope.submitRegister = function (isValid) {
-      var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
 
       // check to make sure the form is completely valid
       if (isValid) {
-        alert('our form is amazing');
+
+        $log.info("$scope.userRegister.firstName-1",$scope.userRegister.firstName);
+        var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
 
         //use Firebase method createUser to add user with email & password credentials
         //note this only give user a UID, no other info attached to user and NOT authenticated (logged in)
-        $log.info("$scope.userRegister.firstName-1",$scope.userRegister.firstName);
-
         ref.createUser({
           email    : $scope.userRegister.email,
           password : $scope.userRegister.password
@@ -86,18 +108,18 @@ angular.module('GA_Dashboard')
             }
           } else {
             //note userData consists solely of UID
-            $log.info("Successfully created user account with uid:", userData);
-
-            $log.info("$scope.userRegister.firstName-2",$scope.userRegister.firstName);
-            //save user at Registration with UID and empty object
-            var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
-
+            //this sets up empty user profile - will be filled in when user logs in with authData method
             ref.child("users").child(userData.uid).set({
-              profileExist: true,
-              provider: " ",
-              email: $scope.userRegister.email,
-              name: $scope.userRegister.name
+              email: " ",
+              name: " ",
+              profileExist: false,
+              provider: " "
             });
+
+            //note userData consists solely of UID
+            $log.info("Successfully created user account with uid:", userData.uid);
+
+            //$log.info("$scope.userRegister.firstName-2",$scope.userRegister.firstName);
           } //end function
         }); //end createUser
 
@@ -112,8 +134,8 @@ angular.module('GA_Dashboard')
     };
 
     //resets newUser object
-    $scope.resetRegisterForm = function (name,email,password) {
-      $scope.userRegister = {name: '', email: '', password: ''};
+    $scope.resetRegisterForm = function (email, password) {
+      $scope.userRegister = {email: '', password: ''};
     };
 
     //resets newUser object
