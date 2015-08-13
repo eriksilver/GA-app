@@ -22,37 +22,20 @@ angular.module('GA_Dashboard')
             // check to make sure the form is completely valid
             if (isValid) {
 
+                //firebase method to authorize user with email and password
                 $scope.authObj.$authWithPassword({
                     email    : $scope.userLogin.email,
                     password : $scope.userLogin.password
                 }).then(function(authData) {
 
+                    //user currentUser Service to check if user is new (no Profile)
+                    //if new, the Service will create a Profile
                     currentUser.checkUserProfile(authData);
+
                     //with successful login, direct to Dashboard page
                     //$state.go("dashboard");
 
                     $log.info("Authenticated successfully with payload:", authData);
-                    // //create user profile with login authdata
-                    // ref.child("users").child(authData.uid).set({
-                    //   email: $scope.userLogin.email,
-                    //   name: getName(authData),
-                    //   profileExist: true,
-                    //   provider: authData.provider, //authentication method, e.g. password
-                    // });
-                    //
-                    // // find a suitable name for the user based on the meta info given by each provider
-                    // function getName(authData) {
-                    //   switch(authData.provider) {
-                    //     case 'password':
-                    //     return authData.password.email.replace(/@.*/, '');
-                    //     // use below if twitter or facebook authentication is used
-                    //     // case 'twitter':
-                    //     // return authData.twitter.displayName;
-                    //     // case 'facebook':
-                    //     // return authData.facebook.displayName;
-                    // }
-                    // }
-
 
                     //catch method used for error handling
                 }).catch(function(error) {
@@ -77,8 +60,9 @@ angular.module('GA_Dashboard')
                 });
 
             }; //end isValid
-            $scope.resetForm ();
 
+            //call resetForm to clear user form entry
+            $scope.resetForm ();
         }; //end submitLogin
 
 
@@ -110,37 +94,31 @@ angular.module('GA_Dashboard')
                             $log.error("Error creating user:", error);
                         }
                     } else {
-                        //note userData consists solely of UID
-                        //this sets up empty user profile - will be filled in when user logs in with authData method
-                        ref.child("users").child(userData.uid).set({
-                            email: " ",
-                            name: " ",
-                            profileExist: false,
-                            provider: " "
-                        });
 
-                        //note userData consists solely of UID
-                        $log.info("Successfully created user account with uid:", userData.uid);
+                        //call currentUser service to create iniital profile for user
+                        currentUser.createInitialProfile(userData);
 
                     } //end function
                 }); //end createUser
 
             } //end isValid
-
+            // clear entry fields on user Registration form
             $scope.resetRegisterForm ();
         }; //end submitRegister
 
         //logout user
         $scope.logout = function () {
+
+            //call firebase unauth method to log out user
             ref.unauth();
         };
 
-        //resets newUser object
+        //resets userRegister object
         $scope.resetRegisterForm = function (email, password) {
             $scope.userRegister = {email: '', password: ''};
         };
 
-        //resets newUser object
+        //resets userLogin object
         $scope.resetForm = function (email, password) {
             $scope.userLogin = {email: '', password: ''};
         };

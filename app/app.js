@@ -8,12 +8,31 @@ var myApp = angular.module('GA_Dashboard', [
 ]);
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-
+    //     $logProvider.debugEnabled(true);
 });
 
 myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray',
 function ($log, $firebaseAuth, $firebaseArray) {
     $log.info("begin currentUser service");
+
+
+    this.createInitialProfile = function (userData) {
+        //note userData consists solely of firebase UID
+        //this function makes an empty user profile to be filled in when user logs in with authData method
+
+        $log.info("begin createInitialProfile");
+        // Get a database reference to our users
+        var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
+        ref.child("users").child(userData.uid).set({
+            email: " ",
+            name: " ",
+            profileExist: false,
+            provider: " "
+        });
+
+        $log.info("Successfully created user account with uid:", userData.uid);
+    }; //end createInitialProfile
+
 
     this.checkUserProfile = function (authData) {
         $log.info("begin checkUserProfile");
@@ -37,7 +56,7 @@ function ($log, $firebaseAuth, $firebaseArray) {
                 // save the user's profile into Firebase database
                 ref.child(authData.uid).set({
                     profileExist: true,
-                    provider: authData.provider,
+                    provider: authData.provider, //authentication method, e.g. password
                     email: authData.password.email,
                     name: getName(authData)
                 });
@@ -46,10 +65,11 @@ function ($log, $firebaseAuth, $firebaseArray) {
                     switch(authData.provider) {
                         case 'password':
                         return authData.password.email.replace(/@.*/, '');
-                        case 'twitter':
-                        return authData.twitter.displayName;
-                        case 'facebook':
-                        return authData.facebook.displayName;
+                        // use below if twitter or facebook authentication is used
+                        //     // case 'twitter':
+                        //     // return authData.twitter.displayName;
+                        //     // case 'facebook':
+                        //     // return authData.facebook.displayName;
                     } //end switch
                 } //end getName
             } //end if profileExist
