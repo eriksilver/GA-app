@@ -16,28 +16,25 @@ function ($log, $firebaseAuth, $firebaseArray) {
     $log.info("begin currentUser service");
 
     this.checkUserProfile = function (authData) {
-        var currentUser = authData.uid;
         $log.info("begin checkUserProfile");
+
+        //save current user id, e.g. simplelogin:3
+        var currentUser = authData.uid;
+
         // Get a database reference to our users
         var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
 
         // Attach an asynchronous callback to read the data at our users reference
         ref.once("value", function(snapshot) {
-            var profileCheck = snapshot.child("currentUser").child("profileExist");
-            $log.info("var profileCheck:", profileCheck);
-            //$log.info("var profileCheck.keys:", profileCheck.email);
-            $log.info("currentUser:", currentUser);
-
-            //$log.info("var profileCheck.key:", profileCheck.key());
-
-
-            //$log.info("var profileCheck.cU.pE:", profileCheck.currentUser.profileExist);
+            //get data snapshot of a specific (current) user
+            var userSnapshot = snapshot.child(currentUser);
+            //get the profileExist key data from that snapshot (true/false)
+            var profileExist = userSnapshot.child("profileExist").val();
+            $log.info("current profileExist:", profileExist);
 
             //if user does NOT have a profile; SAVE profile data
-            if (profileCheck.currentUser.profileExist === false) {
-                // save the user's profile into the database so we can list users,
-                // use them in Security and Firebase Rules, and show profiles
-
+            if (profileExist === false) {
+                // save the user's profile into Firebase database
                 ref.child(authData.uid).set({
                     profileExist: true,
                     provider: authData.provider,
@@ -55,8 +52,7 @@ function ($log, $firebaseAuth, $firebaseArray) {
                         return authData.facebook.displayName;
                     } //end switch
                 } //end getName
-            } //end if profileCheck
-
+            } //end if profileExist
             //Firebase "ref.once" check, error object result
         }, function (errorObject) {
             $log.info("The read failed: " + errorObject.code);
@@ -85,7 +81,7 @@ function ($log, $firebaseAuth, $firebaseArray) {
 
                 //Console log to confirm a user is logged in
                 $log.info("***User " + authData.uid + " is logged in with " + authData.provider);
-                $log.info("service test - current user id:",currentUser.uid);
+                // $log.info("service test - current user id:",currentUser.uid);
 
             } else {
                 //if authData is null (user is logged out); be explicit with currentUser service
@@ -99,7 +95,7 @@ function ($log, $firebaseAuth, $firebaseArray) {
 
         } //end authDataCallback
         // Register the callback to be fired every time auth state changes
-        var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+        var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
         ref.onAuth(authDataCallback);
     }; //end authCheck
 
