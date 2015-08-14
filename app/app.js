@@ -11,9 +11,9 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //     $logProvider.debugEnabled(true);
 });
 
-myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray',
-function ($log, $firebaseAuth, $firebaseArray) {
-    $log.info("begin currentUser service");
+myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray', '$q',
+function ($log, $firebaseAuth, $firebaseArray, $q) {
+    // $log.info("begin currentUser service");
     // For each user, create a profile object when Registered
     // When user registers, Firebase UID is created
     // When user logs in, Firebsae authData is created
@@ -83,80 +83,80 @@ function ($log, $firebaseAuth, $firebaseArray) {
         }); //end Firebase ref.once
     }; //end checkUserProfile
 
-    // this.userTest = function () {
-    //     uid: null
-    //     $log.info("inside var userTest :");
-    // };
+    //variable self setup to pull out userID from authCheck service
+    //so other functions in the service can use the userID
+    var self = this;
 
-    // this.saveUser = function (authData) {
-    //     userID = authData.uid;
-    //     $log.info("inside saveUser :", userID);
-    //
-    // };
-
-    //Uses the onAuth() method to listen for changes in user authentication state
     this.authCheck = function () {
         var userID = " ";
 
         function authDataCallback(authData) {
-            $log.info("inside authDataCallback :");
 
             if (authData) {
                 //if authData is not null; then we have a User logged in via Firebase authentication
-                //Here we assign the logged in user to the currentUser service
-                //currentUser.saveUser(authData);
+                //Here we capture the user UID from the authdata
+                userID = authData.uid;
 
                 //Console log to confirm a user is logged in
                 $log.info("***User " + authData.uid + " is logged in with " + authData.provider);
-                // $log.info("service test - current user id:",currentUser.uid);
-                userID = authData.uid;
 
             } else {
                 //if authData is null (user is logged out); be explicit with currentUser service
-                //currentUser.uid = null;
+                userID = null;
                 //Console log to confirm user is logged out
                 $log.info("***User is logged out");
-                //$log.info("service test - current user id null:",currentUser.uid);
 
             }//end if(authdata)
+
+            //gets the userID and self.userID can be used in other function in the service
+            self.userID = userID;
+
             return userID;
         } //end authDataCallback
-        // Register the callback to be fired every time auth state changes
+
+
+        //Uses the onAuth() method to listen for changes in user authentication state
         var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
         ref.onAuth(authDataCallback);
-
-        // return authCheck;
-        //$log.info("userID from authCheck:", userID);
-        // $log.info("userID from authCheck:", authData);
 
         return userID;
     }; //end authCheck
 
-    this.accessUserData = function (userUID) {
-        var userData = " ";
+    this.accessUserData = function () {
+        var deferred = $q.defer();
+        var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
 
-        function takeSnapshot () {
-            var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
+        ref.once("value", function(snapshot) {
+            var userData = snapshot.child(self.userID).val();
+            deferred.resolve(userData);
+        });
 
-            ref.once("value", function(snapshot) {
-                var userData = snapshot.child(userUID).val();
-                return userData;
-
-                $log.info("takeSnapshot userData:", userData);
-            });
-
-        };
-
-        takeSnapshot();
-        return userData;
-
-
+        // $log.info("deferred.promise:", deferred.promise);
+        return deferred.promise;
     }; //end accessUserData
 
+    this.saveUserData = function (userEmail,userName) {
+        var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
 
+        var onComplete = function(error) {
+            if (error) {
+                console.log('saveUserData Sync to Firebase failed');
+            } else {
+                //confirms data saved to firebase
+                console.log('Synchronization succeeded');
+            }
+        };
+        //firebase method to update user data
+        ref.child(self.userID).update({
+            email: userEmail,
+            name: userName
+        //onComplete is a callback that fires when data write to Firebase is a success
+        },onComplete);
+    }; //end saveUserData
 
-    $log.info("end currentUser service:");
+    // $log.info("end currentUser service:");
 }]); //end currentUser service
+
 
 myApp.run(["$rootScope", "$state", "$log", "currentUser", function ($rootScope, $state, $log, currentUser) {
 
