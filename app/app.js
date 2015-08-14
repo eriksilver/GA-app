@@ -14,7 +14,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray',
 function ($log, $firebaseAuth, $firebaseArray) {
     $log.info("begin currentUser service");
-
+    // For each user, create a profile object when Registered
+    // When user registers, Firebase UID is created
+    // When user logs in, Firebsae authData is created
+    // When User is authorized, check if they have a Profile
+    // If not, save their authdata as a User
 
     this.createInitialProfile = function (userData) {
         //note userData consists solely of firebase UID
@@ -79,29 +83,33 @@ function ($log, $firebaseAuth, $firebaseArray) {
         }); //end Firebase ref.once
     }; //end checkUserProfile
 
-    this.userTest = function () {
-        uid: null
-        $log.info("inside var userTest :");
-    };
+    // this.userTest = function () {
+    //     uid: null
+    //     $log.info("inside var userTest :");
+    // };
+
+    // this.saveUser = function (authData) {
+    //     userID = authData.uid;
+    //     $log.info("inside saveUser :", userID);
+    //
+    // };
 
     //Uses the onAuth() method to listen for changes in user authentication state
     this.authCheck = function () {
+        var userID = " ";
 
         function authDataCallback(authData) {
             $log.info("inside authDataCallback :");
 
             if (authData) {
-
-                //use currentUser service to check if user has logged in before (has a profile)
-                //currentUser.checkUserProfile();
-
                 //if authData is not null; then we have a User logged in via Firebase authentication
                 //Here we assign the logged in user to the currentUser service
-                //currentUser.uid = authData.uid;
+                //currentUser.saveUser(authData);
 
                 //Console log to confirm a user is logged in
                 $log.info("***User " + authData.uid + " is logged in with " + authData.provider);
                 // $log.info("service test - current user id:",currentUser.uid);
+                userID = authData.uid;
 
             } else {
                 //if authData is null (user is logged out); be explicit with currentUser service
@@ -111,13 +119,40 @@ function ($log, $firebaseAuth, $firebaseArray) {
                 //$log.info("service test - current user id null:",currentUser.uid);
 
             }//end if(authdata)
-
-
+            return userID;
         } //end authDataCallback
         // Register the callback to be fired every time auth state changes
         var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com");
         ref.onAuth(authDataCallback);
+
+        // return authCheck;
+        //$log.info("userID from authCheck:", userID);
+        // $log.info("userID from authCheck:", authData);
+
+        return userID;
     }; //end authCheck
+
+    this.accessUserData = function (userUID) {
+        var userData = " ";
+
+        function takeSnapshot () {
+            var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
+
+            ref.once("value", function(snapshot) {
+                var userData = snapshot.child(userUID).val();
+                return userData;
+
+                $log.info("takeSnapshot userData:", userData);
+            });
+
+        };
+
+        takeSnapshot();
+        return userData;
+
+
+    }; //end accessUserData
+
 
 
     $log.info("end currentUser service:");
@@ -125,22 +160,14 @@ function ($log, $firebaseAuth, $firebaseArray) {
 
 myApp.run(["$rootScope", "$state", "$log", "currentUser", function ($rootScope, $state, $log, currentUser) {
 
-    // For each user, create a profile object when Registered
-    // Separate when user registers -UID is created
-    // vs When user logs in - authData is created
-    // When User is authorized, check if they have a Profile
-    // If not, save their authdata as a User
-    currentUser.userTest();
-
-    currentUser.authCheck();
-
     //subscribes to $stateChangeStart to inspect for requireLogin property
     //default for UI router to fire this at the $rootScope level
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         //checks for data property "requirelogin" (true/false) in the stateprovider
         var requireLogin = toState.data.requireLogin;
         //true if currentUser.uid is defined and is not null
-        var currentUserExists = angular.isDefined(currentUser.uid) && currentUser.uid !== null;
+        var currentUserExists = angular.isDefined(currentUser.authCheck()) && currentUser.uid !== null;
+        $log.info("currentUserExists in myApp.run:",currentUserExists);
         //true if requireLogin is required and user is logged out (currentUser is null)
         var shouldRedirectToLogin = requireLogin && !currentUserExists;
         //if true, direct to login page

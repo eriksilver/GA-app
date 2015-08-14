@@ -1,10 +1,6 @@
 
-//console.log('login JS before controller');
-
 angular.module('GA_Dashboard')
-// app.config(['$logProvider', function($logProvider){
-//     $logProvider.debugEnabled(true);
-// }]);
+
 
 .controller("LoginCtrl", [
     "$scope", "$firebaseAuth", "$state","$log","currentUser",
@@ -13,10 +9,10 @@ angular.module('GA_Dashboard')
 
         //establish Firebase reference to be used by all functions in the controller
         var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/");
+        //firebase auth obj used for login / logout
         $scope.authObj = $firebaseAuth(ref);
 
-
-        //login method | submits form after initial validation has occurred
+        //login method | submits form after form validation has occurred
         $scope.submitLogin = function (isValid) {
 
             // check to make sure the form is completely valid
@@ -36,6 +32,8 @@ angular.module('GA_Dashboard')
                     //$state.go("dashboard");
 
                     $log.info("Authenticated successfully with payload:", authData);
+
+                    // $log.info("here is currentUser.authCheck.userID:", currentUser.authCheck.userID);
 
                     //catch method used for error handling
                 }).catch(function(error) {
@@ -64,7 +62,6 @@ angular.module('GA_Dashboard')
             //call resetForm to clear user form entry
             $scope.resetForm ();
         }; //end submitLogin
-
 
 
         //login method | submits form after iniital validation has occurred

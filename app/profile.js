@@ -5,33 +5,22 @@ angular.module('GA_Dashboard')
   "$scope", "$rootScope","$firebaseArray", "$state", "$log", "currentUser",
   function($scope, $rootScope, $firebaseArray, $state, $log, currentUser) {
     $log.info("ProfileCtrl ran test");
-    ////NOTES
-    // currentUser service stores user id (uid)
-    // put user data in local variable and use $scope to show in view
 
     //get out UID from currentUser service
-    var userID = currentUser.uid;
+    $log.info("from profileCtrl currentUser UID:", currentUser.authCheck());
 
-    // Get a database reference to our users
-    var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
-
-    // Attach a Firebase callback to read the data from users reference
-    ref.once("value", function(snapshot) {
-      //get snapshot of specific user
-      var userSnapshot = snapshot.child(userID);
-      //get data from that snapshot
-      var userData = userSnapshot.val();
-      $log.info("current userData:", userData);
+    var userUID = currentUser.authCheck();
+    var userDetails = currentUser.accessUserData(userUID);
+    $log.info("userDetails:", userDetails);
 
       //make data available in $scope to display in the view
-      $scope.userEmail = userData.email;
-      $scope.userName = userData.name;
-      $scope.userUrl = userData.webProperty;
+      $scope.userEmail = userDetails.email;
+      $scope.userName = userDetails.name;
 
       //using $scope.$apply() to make sure data fills in view;
       //otherwise it was requiring a click in the form element to populate
-      $scope.$apply();
-    });
+      //$scope.$apply();
+
 
     $scope.saveUser = function () {
       ref.child(userID).update({
