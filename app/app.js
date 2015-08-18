@@ -5,11 +5,32 @@
 var myApp = angular.module('GA_Dashboard', [
     'ui.router',
     'firebase',
+    'ui.bootstrap',
 ]);
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //     $logProvider.debugEnabled(true);
 });
+
+myApp.factory("AlertService", ["$log",
+    function($log) {
+        var alerts = [];
+
+        function add_alert(alert) {
+            alerts.push(alert);
+        }
+
+        function remove_alert(index) {
+            alerts.splice(index, 1);
+        }
+
+        return {
+                alerts: alerts,
+                add: add_alert,
+                remove: remove_alert,
+        };
+    }
+])
 
 myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray', '$q','$rootScope',
 function ($log, $firebaseAuth, $firebaseArray, $q, $rootScope) {
@@ -142,11 +163,11 @@ function ($log, $firebaseAuth, $firebaseArray, $q, $rootScope) {
         var onComplete = function(error) {
             if (error) {
                 $log.debug('saveUserData Sync to Firebase failed');
-                $rootScope.$broadcast('saveProfileFail', {message: "Save failed, please try again."});
+                $rootScope.$broadcast('saveProfileAlert', {message: "Save failed, please try again.",result: "danger"});
             } else {
                 //confirms data saved to firebase
                 $log.debug('saveUserData Sync to Firebase success');
-                $rootScope.$broadcast('saveProfileSuccess', {message: "Profile Updated"});
+                $rootScope.$broadcast('saveProfileAlert', {message: "Profile Updated", result: "success"});
             }
         };
 

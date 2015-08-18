@@ -1,9 +1,18 @@
 
 angular.module('GA_Dashboard')
 
+// .controller("ProfileAlertsController", [
+//     "$log",
+//     "$scope",
+//     "AlertService",
+//     function($log, $scope, AlertService) {
+//         $scope.alerts = AlertService.alerts;
+//     }
+// ])
+
 .controller("ProfileCtrl", [
-  "$scope", "$state", "$log", "currentUser","$rootScope",
-  function($scope, $state, $log, currentUser, rootScope) {
+  "$scope", "$state", "$log", "currentUser","$rootScope", "AlertService",
+  function($scope, $state, $log, currentUser, rootScope, AlertService) {
     $log.info("ProfileCtrl ran");
 
     //use currentUser service to get current user email and name
@@ -21,22 +30,27 @@ angular.module('GA_Dashboard')
     $scope.saveUser = function () {
         //use currentUser service to save email and name updates
         currentUser.saveUserData($scope.userEmail,$scope.userName);
-
-        //receive Broadcast to Alert user Firebase sync failed
-        $scope.$on('saveProfileFail', function(event,args) {
-            $log.info("args:", args.message);
-            $scope.visibleFail = true;
-            $scope.$apply();
-        });
-
-        //receive Broadcast to Alert user Firebase sync success
-        $scope.$on('saveProfileSuccess', function(event,args) {
-            $log.info("args:", args.message);
-            $scope.visibleSuccess = true;
-            $scope.$apply();
-        });
-
     };
 
+    //setup alerts in controller scope
+    $scope.alerts = AlertService.alerts;
+
+    //receive Broadcast to Alert user Firebase sync failed
+    $scope.$on('saveProfileAlert', function(event,args) {
+        AlertService.add({
+            message: args.message,
+            type: args.result,
+            timeout: 6000,
+        });
+        $scope.$apply();
+    });
+
+    $scope.closeAlert = function (index) {
+        AlertService.remove(index);
+    };
+
+    //testing AlertService
+    // var testAlert = {message: "testing 123"};
+    // AlertService.add(testAlert);
 
 }]);
