@@ -11,8 +11,8 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //     $logProvider.debugEnabled(true);
 });
 
-myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray', '$q',
-function ($log, $firebaseAuth, $firebaseArray, $q) {
+myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray', '$q','$rootScope',
+function ($log, $firebaseAuth, $firebaseArray, $q, $rootScope) {
     // $log.info("begin currentUser service");
     // For each user, create a profile object when Registered
     // When user registers, Firebase UID is created
@@ -138,21 +138,27 @@ function ($log, $firebaseAuth, $firebaseArray, $q) {
     this.saveUserData = function (userEmail,userName) {
         var ref = new Firebase("https://dazzling-torch-1941.firebaseio.com/users");
 
+        //callback to log success/error of saving data to Firebase
         var onComplete = function(error) {
             if (error) {
-                console.log('saveUserData Sync to Firebase failed');
+                $log.debug('saveUserData Sync to Firebase failed');
+                $rootScope.$broadcast('saveProfileFail', {message: "Save failed, please try again."});
             } else {
                 //confirms data saved to firebase
-                console.log('Synchronization succeeded');
+                $log.debug('saveUserData Sync to Firebase success');
+                $rootScope.$broadcast('saveProfileSuccess', {message: "Profile Updated"});
             }
         };
+
         //firebase method to update user data
         ref.child(self.userID).update({
             email: userEmail,
             name: userName
-        //onComplete is a callback that fires when data write to Firebase is a success
+            //onComplete is a callback that fires when data write to Firebase is a success
         },onComplete);
+
     }; //end saveUserData
+
 
     // $log.info("end currentUser service:");
 }]); //end currentUser service
