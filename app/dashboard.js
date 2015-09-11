@@ -38,6 +38,7 @@ angular.module('GA_Dashboard')
 
     });
 
+    var reportData = { };
     //test using Google Embed API get get report data
     function runReport() {
         $log.info("runReport ran");
@@ -52,14 +53,16 @@ angular.module('GA_Dashboard')
 
         report.on('success', function(response) {
             console.log("runReport", response);
-            var reportData = response.query;
-            console.log('reportData',reportData);
+            reportData = response.query;
+            console.log('reportData- INside of function',reportData);
+            runKeen();
             // var reportDataJSON = JSON.parse(reportData);
             // console.log('reportDataJSON',reportDataJSON);
 
         });
         report.execute();
     }
+
 
     function listAccountSummaries() {
         $log.info("listAccountSummaries ran");
@@ -126,7 +129,8 @@ angular.module('GA_Dashboard')
     }
 
     ///////////////////BEGIN KEENIO SETUP
-
+function runKeen() {
+    console.log("runKeen-go");
     var client = new Keen({
         projectId: "55f3306dc2266c7197951e78", // String (required always)
         writeKey: "803224c232778760d9165fe80bd5bc18c9658ea85495fefeb951041dc69575b49534cd9e894861be7cd0a119cf94a57f92e9681430acef6c02532d8fd9c01f5fee4ba972ec3ec80f94225e85e2c10c1c2d6f76dcaccf7dbae6086d686478c8aaf7ab997a5f3b0f990374efd9539f09a2",   // String (required for sending data)
@@ -137,30 +141,42 @@ angular.module('GA_Dashboard')
         // requestType: "jsonp"       // String (optional: jsonp, xhr, beacon)
     });
 
-    // Create a data object to record multiple events
-    var multipleEvents = {
-      "purchases": [
-        { item: "golden gadget", price: 2550, transaction_id: "f029342" },
-        { item: "a different gadget", price: 1775, transaction_id: "f029342" }
-      ],
-      "transactions": [
-        {
-          id: "f029342",
-          items: 2,
-          total: 4325
-        }
-      ]
-    };
+    // // Create a data object to record multiple events
+    // var multipleEvents = {
+    //   "purchases": [
+    //     { item: "golden gadget", price: 2550, transaction_id: "f029342" },
+    //     { item: "a different gadget", price: 1775, transaction_id: "f029342" }
+    //   ],
+    //   "transactions": [
+    //     {
+    //       id: "f029342",
+    //       items: 2,
+    //       total: 4325
+    //     }
+    //   ]
+    // };
+
+//NOTE ON DATA FORMAT required
+//A batch of events should be a JSON object, keyed by event collection names,
+//each of which point to a JSON array of events.
+
+    console.log('reportData- outside of function',reportData);
+    var reportDataJSON =
+        JSON.stringify(reportData)  ;
+    alert(reportDataJSON);
 
     // Send multiple events to several collections
-    client.addEvents(multipleEvents, function(err, res){
+    client.addEvents(reportDataJSON, function(err, res){
       if (err) {
+          $log.info("add Event = error",err);
+
         // there was an error!
       }
       else {
-          $log.info("add purchase & transactions events = success",res);
+          $log.info("add Event = success",res);
         // see sample response below
       }
     });
+}
 
 }]); //end DashboardCtrl
