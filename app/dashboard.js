@@ -39,96 +39,45 @@ angular.module('GA_Dashboard')
     });
 
     var reportData = { };
+    var reportDataJSON = { };
+    var keen = { }; //nest data in a "keen" object to avoid getting keen timestamp on data
     //test using Google Embed API get get report data
     function runReport() {
         $log.info("runReport ran");
 
-        var report = new gapi.analytics.report.Data({
-            query: {
-                ids: 'ga:4067996', //Profile ID
-                metrics: 'ga:sessions',
-                dimensions: 'ga:city'
-            }
-        });
+        var profileId = 4067996;
 
-        report.on('success', function(response) {
-            console.log("runReport", response);
-            reportData = response.query;
-            console.log('reportData- INside of function',reportData);
+        gapi.client.analytics.data.ga.get({
+            'ids': 'ga:' + profileId,
+            'start-date': '2015-07-01', //'7daysAgo',
+            'end-date': '2015-07-30',
+            'metrics': 'ga:users',
+            'dimensions': 'ga:date',
+            'prettyPrint': 'true'
+        })
+
+        .then(function(response) {
+            console.log("raw response", response);
+            var formattedJson = JSON.stringify(response.result, null, 2);
+            console.log("formattedJson response", formattedJson);
+            var columnHeaders = formattedJson.columnHeaders;
+            console.log("formattedJson columnHeaders", columnHeaders);
+            var rows = formattedJson.rows;
+            console.log("formattedJson rows", rows);
+            console.log("raw rows", response.result.rows);
+            reportData = response.result.rows;
             runKeen();
-            // var reportDataJSON = JSON.parse(reportData);
-            // console.log('reportDataJSON',reportDataJSON);
 
+            // document.getElementById('query-output').value = formattedJson;
+            // console.log("formattedJson from runReport", formattedJson);
+        })
+        .then(null, function(err) {
+            // Log any errors.
+            console.log(err);
         });
-        report.execute();
     }
 
-
-    function listAccountSummaries() {
-        $log.info("listAccountSummaries ran");
-
-        // Get a list of all Google Analytics accounts for this user
-        var request = gapi.client.analytics.management.accountSummaries.list();
-        request.execute(handleResponse)
-    }
-
-    /*
-    * Example 2:
-    * The results of the list method are passed as the response object.
-    * The following code shows how to iterate through them.
-    */
-    function handleResponse(response) {
-        if (response && !response.error) {
-            if (response.items) {
-                printAccountSummaries(response.items);
-            }
-        } else {
-            console.log('There was an error: ' + response.message);
-        }
-    }
-
-
-    function printAccountSummaries(accounts) {
-        for (var i = 0, account; account = accounts[i]; i++) {
-            console.log('Account id: ' + account.id);
-            console.log('Account name: ' + account.name);
-            console.log('Account kind: ' + account.kind);
-
-            // Print the properties.
-            if (account.webProperties) {
-                printProperties(account.webProperties);
-            }
-        }
-    }
-
-
-    function printProperties(properties) {
-        for (var j = 0, property; property = properties[j]; j++) {
-            console.log('Property id: ' + property.id);
-            console.log('Property name: ' + property.name);
-            console.log('Property kind: ' + property.kind);
-            console.log('Internal id: ' + property.internalWebPropertyId);
-            console.log('Property level: ' + property.level);
-            console.log('Property url: ' + property.websiteUrl);
-
-            // Print the views (profiles).
-            if (property.profiles) {
-                printProfiles(property.profiles);
-            }
-        }
-    }
-
-
-    function printProfiles(profiles) {
-        for (var k = 0, profile; profile = profiles[k]; k++) {
-            console.log('Profile id: ' + profile.id);
-            console.log('Profile name: ' + profile.name);
-            console.log('Profile kind: ' + profile.kind);
-            console.log('Profile type: ' + profile.type);
-        }
-    }
-
-    ///////////////////BEGIN KEENIO SETUP
+    ///////////////////BEGIN KEEN IO SETUP
 function runKeen() {
     console.log("runKeen-go");
     var client = new Keen({
@@ -156,17 +105,35 @@ function runKeen() {
     //   ]
     // };
 
+    // Create a data object to record multiple events
+    var querySimpleViews = {
+            // "time": {"first": "1441123601", "second": "1441469201", "third": "1441901201"},
+            "time": {"first": "2015-09-01T20:39:30.202Z", "second": "2015-09-05T20:39:30.202Z", "third": "2015-09-10T20:39:30.202Z"},
+            "views": {"first": 100, "second": 200, "third": 300}
+
+    };
+
 //NOTE ON DATA FORMAT required
 //A batch of events should be a JSON object, keyed by event collection names,
 //each of which point to a JSON array of events.
 
-    console.log('reportData- outside of function',reportData);
-    var reportDataJSON =
-        JSON.stringify(reportData)  ;
-    alert(reportDataJSON);
+    // console.log('reportData - outside of function',reportData);
+
+    // var reportDataJSON = JSON.stringify(reportData);
+    //alert(reportDataJSON);
+    reportDataJSON = {"data": reportData, "keen": {}} ; //makes reportData an object with "data" key
+    //order data by date key?
+    //store data by report?
+    //might be harder to chart nested data
+    //test data in keen first
+    //maybe use Firebase to store data instead?, but lose built in charting w/ Keen
+
+    // console.log("reportDataJSON", reportDataJSON);
+
+
 
     // Send multiple events to several collections
-    client.addEvents(reportDataJSON, function(err, res){
+    client.addEvent("Queries7",querySimpleViews, function(err, res){
       if (err) {
           $log.info("add Event = error",err);
 
