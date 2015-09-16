@@ -38,9 +38,12 @@ angular.module('GA_Dashboard')
 
     });
 
-    var reportData = { };
-    var reportDataJSON = { };
-    var keen = { }; //nest data in a "keen" object to avoid getting keen timestamp on data
+    var googleData = [];
+    var chartLabels = [];
+    var chartData = [];
+
+
+
     //test using Google Embed API get get report data
     function runReport() {
         $log.info("runReport ran");
@@ -58,67 +61,86 @@ angular.module('GA_Dashboard')
 
         .then(function(response) {
             console.log("raw response", response);
-            var formattedJson = JSON.stringify(response.result, null, 2);
-            console.log("formattedJson response", formattedJson);
-            var columnHeaders = formattedJson.columnHeaders;
-            console.log("formattedJson columnHeaders", columnHeaders);
-            var rows = formattedJson.rows;
-            console.log("formattedJson rows", rows);
-            console.log("raw rows", response.result.rows);
-            reportData = response.result.rows;
+            //var formattedJson = JSON.stringify(response.result, null, 2);
+            //console.log("formattedJson response", formattedJson);
+            // var columnHeaders = formattedJson.columnHeaders;
+            // console.log("formattedJson columnHeaders", columnHeaders);
+            // var rows = formattedJson.rows;
+            // console.log("formattedJson rows", rows);
+            // console.log("raw rows 0- 0", response.result.rows[0].array[0]);
+            //console.log("formattedJson - array", response.result.rows[0][0]);
+
+            googleData = response.result.rows;
+            // console.log("adfafdf", reportData);
+            transformGoogleData();
             runChart();
+
 
             // document.getElementById('query-output').value = formattedJson;
             // console.log("formattedJson from runReport", formattedJson);
         })
         .then(null, function(err) {
             // Log any errors.
-            console.log(err);
+            //console.log(err);
         });
     }
 
+    function transformGoogleData() {
+            for (var i = 0; i < googleData.length-1; i++ ) {
+                chartLabels[i] = googleData[i][0];
+                chartData[i] = googleData[i][1];
+            }
+            console.log("chartLabels:",chartLabels);
+            console.log("chartData:",chartData);
 
-function runChart() {
-    console.log("runKeen-go");
-    var data = [
-    {
-        value: 300,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: "Red"
-    },
-    {
-        value: 50,
-        color: "#46BFBD",
-        highlight: "#5AD3D1",
-        label: "Green"
-    },
-    {
-        value: 100,
-        color: "#FDB45C",
-        highlight: "#FFC870",
-        label: "Yellow"
-    },
-    {
-        value: 40,
-        color: "#949FB1",
-        highlight: "#A8B3C5",
-        label: "Grey"
-    },
-    {
-        value: 120,
-        color: "#4D5360",
-        highlight: "#616774",
-        label: "Dark Grey"
     }
 
-    ];
+//     //Add loop to pull out labels and format data
+//     //sinlge helper function to take in Google data and spit out chart js format
+// var foo = function() {};
+// function helperFunction(data) {
+//     return {};
+// };
+// function runChart(data, ryan) {
+//     if (ryan) {
+//         data = ryan(data);
+//     }
+//
+//     // do the chart
+// };
+// runChart(gData, helperFunction);
+// runChart(gData, function() {});
+// runChart(gData, function foobar() {});
+//
+// //mobile web friendly vs more native like
+// //chrome app is web app with certain file structure
+// //use bootstrap docs to make mobile friendly
+// //design from smallest, xs, need to add medium, large, small
+
+
+
+function runChart(data, dataTrasformFunction) {
+    console.log("runChart-go");
+    var data = {
+    // labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: chartLabels,
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(172,209,233,0.5)", //#ACD1E9
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: chartData
+        }
+    ]
+};
 
 
     // Get the context of the canvas element we want to select
     var ctx = document.getElementById("myChart").getContext("2d");
-    var myNewChart = new Chart(ctx).PolarArea(data);
-    new Chart(ctx).PolarArea(data, options);
+    var myBarChart = new Chart(ctx).Bar(data);
+    new Chart(ctx).Bar(data, options);
 
 //NOTE ON DATA FORMAT required
 //A batch of events should be a JSON object, keyed by event collection names,
