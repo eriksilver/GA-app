@@ -32,8 +32,6 @@ angular.module('GA_Dashboard')
             gapi.analytics.auth.on('success', function(response) {
                 console.log("auth response",response);
                 runReport();
-                // runChart();
-                // listAccountSummaries();
             });
 
         });
@@ -56,7 +54,7 @@ angular.module('GA_Dashboard')
                 'dimensions': 'ga:date',
                 'prettyPrint': 'true'
             })
-
+            //GA data reponse
             .then(function(response) {
                 console.log("raw response", response);
                 //var formattedJson = JSON.stringify(response.result, null, 2);
@@ -65,53 +63,33 @@ angular.module('GA_Dashboard')
                 // console.log("raw rows 0- 0", response.result.rows[0].array[0]);
                 //console.log("formattedJson - array", response.result.rows[0][0]);
 
+                //use response method to retrieve data and then transform it and
+                //build a chart with the data with the runChart function
                 googleData = response.result.rows;
                 transformGoogleData();
                 runChart();
-
-
             })
-            .then(null, function(err) {
+            //GA data response - errors
+            .then(function(err) {
                 // Log any errors.
-                //console.log(err);
+                console.log(err);
             });
-        }
+        };
 
         function transformGoogleData() {
+            //iterate over data array to prepare data in charting format
             for (var i = 0; i < googleData.length-1; i++ ) {
                 chartLabels[i] = googleData[i][0];
                 chartData[i] = googleData[i][1];
             }
             console.log("chartLabels:",chartLabels);
             console.log("chartData:",chartData);
+        };
 
-        }
-
-        // NOTES
-        //     //sinlge helper function to take in Google data and spit out chart js format
-        // var foo = function() {};
-        // function helperFunction(data) {
-        //     return {};
-        // };
-        // function runChart(data, ryan) {
-        //     if (ryan) {
-        //         data = ryan(data);
-        //     }
-        //
-        //     // do the chart
-        // };
-        // runChart(gData, helperFunction);
-        // runChart(gData, function() {});
-        // runChart(gData, function foobar() {});
-        //
-        // //mobile web friendly vs more native like
-        // //chrome app is web app with certain file structure
-        // //use bootstrap docs to make mobile friendly
-        // //design from smallest, xs, need to add medium, large, small
-
-
-        function runChart(data, dataTrasformFunction) {
+        function runChart(data) {
             console.log("runChart-go");
+            //chartJS data input format
+            //how to format data labels??
             var data = {
                 // labels: ["January", "February", "March", "April", "May", "June", "July"],
                 labels: chartLabels,
@@ -126,12 +104,10 @@ angular.module('GA_Dashboard')
                     }
                 ]
             };
-
             // Get the context of the canvas element we want to select
+            // push data into the Chart
             var ctx = document.getElementById("myChart").getContext("2d");
             var myBarChart = new Chart(ctx).Bar(data);
-            new Chart(ctx).Bar(data, options);
-
-        }
+        };
 
     }]); //end DashboardCtrl
