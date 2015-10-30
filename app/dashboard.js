@@ -8,6 +8,24 @@ angular.module('GA_Dashboard')
     function($scope, $firebaseAuth, $state, $log) {
         $log.log("DashboardCtrl ran");
 
+        //set chartTimeFrame default value
+        $scope.chartTimeFrame = "7";
+        //define global timeFrameStart variable
+        var timeFrameStart = "";
+
+        //using $scope watch to see when the chartTimeFrame button is Updated
+        //**issue I think with .foreach where it is iterating on the time frame name by
+        //the amount of letters in the world, e.g. sixty = 5, thirty = 6
+        $scope.$watchCollection('chartTimeFrame', function () {
+            angular.forEach($scope.chartTimeFrame, function (value, key) {
+                if (value) {
+                    timeFrameStart = $scope.chartTimeFrame + "daysAgo";
+                    $log.log("timeFrameStart:",  timeFrameStart);
+                }
+            });
+        });
+
+
         ///Google Analytics API ready function - waits until API script loads
         gapi.analytics.ready(function() {
             // Step 3: Authorize the user.
@@ -40,6 +58,7 @@ angular.module('GA_Dashboard')
         var chartLabels = [];
         var chartData = [];
 
+
         //pull data from Google Analytics Core Reporting API
         function runReport() {
             $log.info("runReport ran");
@@ -48,8 +67,8 @@ angular.module('GA_Dashboard')
 
             gapi.client.analytics.data.ga.get({
                 'ids': 'ga:' + profileId,
-                'start-date': '2015-07-01', //'7daysAgo',
-                'end-date': '2015-07-30',
+                'start-date': timeFrameStart, // //timeFrameStart
+                'end-date': 'today', //timeFrameEnd
                 'metrics': 'ga:users',
                 'dimensions': 'ga:date',
                 'prettyPrint': 'true'

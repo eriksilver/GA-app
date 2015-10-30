@@ -1,5 +1,23 @@
+
 <div class="row">
-  <h2>Your Dashboard</h2>
-  <section id="auth-button"></section>
-  <canvas id="myChart" width="800" height="400"></canvas>
+    <h2>Analytics Dashboard</h2>
+    <!-- using UI-Bootstrap -->
+    <!-- define values, and adjust values when button is pressed -->
+
+    <div class="btn-group">
+        <label class="btn btn-primary" uncheckable>Days:</label>
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'7'">7
+        </label>
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'14'">14
+        </label>
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'30'">30
+        </label>
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'60'">60
+        </label>
+    </div>
+    <pre>{{chartTimeFrame || 'null'}}</pre>
+
+    <section id="auth-button"></section>
+
+    <canvas id="myChart" width="800" height="400"></canvas>
 </div>
