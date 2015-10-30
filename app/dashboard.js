@@ -25,7 +25,6 @@ angular.module('GA_Dashboard')
             });
         });
 
-
         ///Google Analytics API ready function - waits until API script loads
         gapi.analytics.ready(function() {
             // Step 3: Authorize the user.
@@ -50,6 +49,7 @@ angular.module('GA_Dashboard')
             gapi.analytics.auth.on('success', function(response) {
                 console.log("auth response",response);
                 runReport();
+                runReport2();
             });
 
         });
@@ -58,12 +58,92 @@ angular.module('GA_Dashboard')
         var chartLabels = [];
         var chartData = [];
 
+        var chartUsers = {};
+        var chartBounces = {};
+
+        var profileId = 4067996;
+
+        var dashboardCharts = {
+
+            "chartUsers": {
+                gaConfig: {
+                    'ids': 'ga:' + profileId,
+                    'start-date': timeFrameStart, // //timeFrameStart
+                    'end-date': 'today', //timeFrameEnd
+                    'metrics': 'ga:users',
+                    'dimensions': 'ga:date',
+                    'prettyPrint': 'true'
+                },
+                containerId: "showChartUsers",
+                chartLabel: "User Activity",
+                styles: { }
+            },
+            "chartBounces": {
+                gaConfig: {
+                    'ids': 'ga:' + profileId,
+                    'start-date': timeFrameStart, // //timeFrameStart
+                    'end-date': 'today', //timeFrameEnd
+                    'metrics': 'ga:bounces',
+                    'dimensions': 'ga:date',
+                    'prettyPrint': 'true'
+                },
+                containerId: "showChartUsers",
+                chartLabel: "User Activity",
+                styles: { }
+            },
+        };
+
+        //test to access object data
+        $log.log("chartUsers.gaConfig:",dashboardCharts.chartUsers.gaConfig );
+        $log.log("chartBounces.gaConfig[start-date]:",dashboardCharts.chartBounces.gaConfig.ids);
+
+        //DASHBOARD CHARTS DATA STRUCTURE
+        //note: A (key, value) entry in an object is called a property.
+        //dashBoard charts is an object, with 2 objects (chartUsers and chartBounces)
+        //chartUsers is an object with properties: gaConfig(obj), containerId, chartLabel, Styles(obj)
+        //gaConfig is an object with properties: ids, startdate, end date, metrics, dimensions
+        // style is an object that is currently empty
+
+        //TEST loop that iterates over Dashboard Charts two keys/objects: chartUsers and chartBounces
+        // and displays their properties: gaConfig(obj), containerId, chartLabel, Styles(obj)
+        for (var key in dashboardCharts) {
+            if (dashboardCharts.hasOwnProperty(key)) {
+                var obj = dashboardCharts[key];
+                for (var prop in obj) {
+                    // important check that this is objects own property
+                    // not from prototype prop inherited
+                    if(obj.hasOwnProperty(prop)){
+                        console.log("properties in object:",prop + " = " + obj[prop]);
+                    }
+                }
+            }
+        }
+//
+// for(var obj in data) {
+//  results.innerHTML += obj;
+//  results.innerHTML += '<ul>';
+//
+// for(var country in data[obj]) {
+//    var objLen = data[obj].length;
+//     if(typeof objLen != 'undefined')
+
+        //LIVE loop to build pull data, format it, and build charts
+        for (var key in dashboardCharts) {
+            if (dashboardCharts.hasOwnProperty(key)) {
+                //For each of the dashboard charts - do stuff
+                //runReport(pass in data)
+                //runtransformData(pass in data)
+                //run chartBuilder(pass in data)
+
+
+                }
+            }
+        }
+
 
         //pull data from Google Analytics Core Reporting API
         function runReport() {
             $log.info("runReport ran");
-
-            var profileId = 4067996;
 
             gapi.client.analytics.data.ga.get({
                 'ids': 'ga:' + profileId,
@@ -73,14 +153,9 @@ angular.module('GA_Dashboard')
                 'dimensions': 'ga:date',
                 'prettyPrint': 'true'
             })
-            //GA data reponse
+            //GA data response
             .then(function(response) {
                 console.log("raw response", response);
-                //var formattedJson = JSON.stringify(response.result, null, 2);
-                //console.log("formattedJson response", formattedJson);
-
-                // console.log("raw rows 0- 0", response.result.rows[0].array[0]);
-                //console.log("formattedJson - array", response.result.rows[0][0]);
 
                 //use response method to retrieve data and then transform it and
                 //build a chart with the data with the runChart function
@@ -125,7 +200,93 @@ angular.module('GA_Dashboard')
             };
             // Get the context of the canvas element we want to select
             // push data into the Chart
+            //there is an .update method if needed to update chart
             var ctx = document.getElementById("myChart").getContext("2d");
+            var myBarChart = new Chart(ctx).Bar(data);
+
+            // var ctx = document.getElementById("myChart2").getContext("2d");
+            // var myBarChart = new Chart(ctx).Bar(data);
+        };
+
+        ///////////REPORT TWO ////////////////////////
+
+        //steps:
+        //runReport to get API response
+        //pass data through transformGoogleData() to format it
+        //runChart to pass data to ChartJS/ into DOM
+
+        var googleData2 = [];
+        var chartLabels2 = [];
+        var chartData2 = [];
+
+        //pull data from Google Analytics Core Reporting API
+        function runReport2() {
+            $log.info("runReport2 ran");
+
+            var profileId = 4067996;
+
+            gapi.client.analytics.data.ga.get({
+                'ids': 'ga:' + profileId,
+                'start-date': timeFrameStart, // //timeFrameStart
+                'end-date': 'today', //timeFrameEnd
+                'metrics': 'ga:bounces',
+                'dimensions': 'ga:date',
+                'prettyPrint': 'true'
+            })
+            //GA data response
+            .then(function(response) {
+                console.log("raw response2", response);
+                //var formattedJson = JSON.stringify(response.result, null, 2);
+                //console.log("formattedJson response", formattedJson);
+
+                // console.log("raw rows 0- 0", response.result.rows[0].array[0]);
+                //console.log("formattedJson - array", response.result.rows[0][0]);
+
+                //use response method to retrieve data and then transform it and
+                //build a chart with the data with the runChart function
+                googleData2 = response.result.rows;
+                transformGoogleData2();
+                runChart2();
+            })
+            //GA data response - errors
+            .then(function(err) {
+                // Log any errors.
+                console.log(err);
+            });
+        };
+
+        function transformGoogleData2() {
+            //iterate over data array to prepare data in charting format
+            for (var i = 0; i < googleData.length-1; i++ ) {
+                chartLabels2[i] = googleData2[i][0];
+                chartData2[i] = googleData2[i][1];
+            }
+            console.log("chartLabels2:",chartLabels2);
+            console.log("chartData2:",chartData2);
+        };
+
+        function runChart2(data) {
+            console.log("runChart-go");
+            //chartJS data input format
+            //how to format data labels??
+            var data = {
+                // labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: chartLabels2,
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fillColor: "rgba(172,209,233,0.5)", //#ACD1E9
+                        strokeColor: "rgba(220,220,220,0.8)",
+                        highlightFill: "rgba(220,220,220,0.75)",
+                        highlightStroke: "rgba(220,220,220,1)",
+                        data: chartData2
+                    }
+                ]
+            };
+            // Get the context of the canvas element we want to select
+            // push data into the Chart
+            //there is an .update method if needed to update chart
+            var ctx = document.getElementById("myChart2").getContext("2d");
             var myBarChart = new Chart(ctx).Bar(data);
         };
 
