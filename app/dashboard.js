@@ -12,6 +12,8 @@ angular.module('GA_Dashboard')
         $scope.chartTimeFrame = "7";
         //define global timeFrameStart variable
         var timeFrameStart = "";
+        timeFrameStart = $scope.chartTimeFrame + "daysAgo";
+
 
         //using $scope watch to see when the chartTimeFrame button is Updated
         //**issue I think with .foreach where it is iterating on the time frame name by
@@ -48,8 +50,9 @@ angular.module('GA_Dashboard')
             //With successful authorization, log response, and call function
             gapi.analytics.auth.on('success', function(response) {
                 console.log("auth response",response);
-                runReport();
-                runReport2();
+                buildChartsLoop();
+                // runReport();
+                // runReport2();
             });
 
         });
@@ -68,7 +71,7 @@ angular.module('GA_Dashboard')
             "chartUsers": {
                 gaConfig: {
                     'ids': 'ga:' + profileId,
-                    'start-date': timeFrameStart, // //timeFrameStart
+                    'start-date': timeFrameStart, //'2015-10-15', //
                     'end-date': 'today', //timeFrameEnd
                     'metrics': 'ga:users',
                     'dimensions': 'ga:date',
@@ -95,7 +98,7 @@ angular.module('GA_Dashboard')
 
         //test to access object data
         $log.log("chartUsers.gaConfig:",dashboardCharts.chartUsers.gaConfig );
-        $log.log("chartBounces.gaConfig[start-date]:",dashboardCharts.chartBounces.gaConfig.ids);
+        $log.log("chartBounces.gaConfig.ids:",dashboardCharts.chartBounces.gaConfig.ids);
 
         //DASHBOARD CHARTS DATA STRUCTURE
         //note: A (key, value) entry in an object is called a property.
@@ -108,16 +111,20 @@ angular.module('GA_Dashboard')
         // and displays their properties: gaConfig(obj), containerId, chartLabel, Styles(obj)
         for (var key in dashboardCharts) {
             if (dashboardCharts.hasOwnProperty(key)) {
+                $log.log("dashboardCharts.key:",key); //=chartUsers
                 var obj = dashboardCharts[key];
                 for (var prop in obj) {
+                    $log.log("obj.gaConfig:",obj.gaConfig); //=chartUsers.gaConfig
+
+                    // $log.log("prop,ojb:",prop+","+obj);
                     // important check that this is objects own property
                     // not from prototype prop inherited
                     if(obj.hasOwnProperty(prop)){
-                        console.log("properties in object:",prop + " = " + obj[prop]);
+                        // console.log("properties in object:",prop + " = " + obj[prop]);
                     }
                 }
             }
-        }
+        };
 //
 // for(var obj in data) {
 //  results.innerHTML += obj;
@@ -127,41 +134,63 @@ angular.module('GA_Dashboard')
 //    var objLen = data[obj].length;
 //     if(typeof objLen != 'undefined')
 
-        //LIVE loop to build pull data, format it, and build charts
-        for (var key in dashboardCharts) {
-            if (dashboardCharts.hasOwnProperty(key)) {
-                //For each of the dashboard charts - do stuff
-                //runReport(pass in data)
-                //runtransformData(pass in data)
-                //run chartBuilder(pass in data)
+//LIVE loop to pull data, format it, and build charts
+function buildChartsLoop () {
+    for (var key in dashboardCharts) {
+        if (dashboardCharts.hasOwnProperty(key)) {
+            //For each of the dashboard charts - do stuff
+            var chartConfigObject = dashboardCharts[key];
+            $log.log("chartConfigObject.gaConfig:",chartConfigObject.gaConfig); //=chartUsers.gaConfig
 
+            // for (var prop in chartConfigObject) {
+            //
+            //     // $log.log("prop,ojb:",prop+","+obj);
+            //     // important check that this is objects own property
+            //     // not from prototype prop inherited
+            //     if(obj.hasOwnProperty(prop)){
+            //         // console.log("properties in object:",prop + " = " + obj[prop]);
+            //     }
+            // }
 
-                }
-            }
+            runReport(chartConfigObject['gaConfig']);
+
+            //runtransformData(pass in data)
+            //run chartBuilder(pass in data)
+
         }
+    }
+}
 
+// {
+//     'ids': 'ga:' + profileId,
+//     'start-date': timeFrameStart, // //timeFrameStart
+//     'end-date': 'today', //timeFrameEnd
+//     'metrics': 'ga:bounces',
+//     'dimensions': 'ga:date',
+//     'prettyPrint': 'true'
+// }
 
-        //pull data from Google Analytics Core Reporting API
-        function runReport() {
+        //call data from Google Analytics Core Reporting API
+        function runReport(chartConfig) {
             $log.info("runReport ran");
+            $log.info("chartConfig:",chartConfig);
+            $log.info("chartConfig.ids:",chartConfig.ids);
+            $log.info("chartConfig.metrics:",chartConfig.metrics);
+            $log.info("chartConfig.start-date:",chartConfig['start-date']);
+            $log.info("chartConfig.end-date:",chartConfig['end-date']);
 
-            gapi.client.analytics.data.ga.get({
-                'ids': 'ga:' + profileId,
-                'start-date': timeFrameStart, // //timeFrameStart
-                'end-date': 'today', //timeFrameEnd
-                'metrics': 'ga:users',
-                'dimensions': 'ga:date',
-                'prettyPrint': 'true'
-            })
+            var chartConfigData = chartConfig;
+
+            gapi.client.analytics.data.ga.get(chartConfigData)
             //GA data response
             .then(function(response) {
-                console.log("raw response", response);
+                console.log("results from chart config:", response);
 
                 //use response method to retrieve data and then transform it and
                 //build a chart with the data with the runChart function
-                googleData = response.result.rows;
-                transformGoogleData();
-                runChart();
+                // googleData = response.result.rows;
+                // transformGoogleData();
+                // runChart();
             })
             //GA data response - errors
             .then(function(err) {
