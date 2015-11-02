@@ -161,43 +161,51 @@ function buildChartsLoop () {
     }
 }
 
-// {
-//     'ids': 'ga:' + profileId,
-//     'start-date': timeFrameStart, // //timeFrameStart
-//     'end-date': 'today', //timeFrameEnd
-//     'metrics': 'ga:bounces',
-//     'dimensions': 'ga:date',
-//     'prettyPrint': 'true'
-// }
+function runReport(chartConfig) {
+    var chartConfigData = chartConfig;
 
-        //call data from Google Analytics Core Reporting API
-        function runReport(chartConfig) {
-            $log.info("runReport ran");
-            $log.info("chartConfig:",chartConfig);
-            $log.info("chartConfig.ids:",chartConfig.ids);
-            $log.info("chartConfig.metrics:",chartConfig.metrics);
-            $log.info("chartConfig.start-date:",chartConfig['start-date']);
-            $log.info("chartConfig.end-date:",chartConfig['end-date']);
+    var apiQuery = gapi.client.analytics.data.ga.get(chartConfigData)
 
-            var chartConfigData = chartConfig;
+    apiQuery.execute(handleCoreReportingResults);
+}
 
-            gapi.client.analytics.data.ga.get(chartConfigData)
-            //GA data response
-            .then(function(response) {
-                console.log("results from chart config:", response);
-
-                //use response method to retrieve data and then transform it and
-                //build a chart with the data with the runChart function
-                // googleData = response.result.rows;
-                // transformGoogleData();
-                // runChart();
-            })
-            //GA data response - errors
-            .then(function(err) {
-                // Log any errors.
-                console.log(err);
-            });
-        };
+function handleCoreReportingResults(results) {
+    if (!results.error) {
+        console.log("big time results!!!!", results);
+        // Success. Do something cool!
+    } else {
+        alert('There was an error: ' + results.message);
+    }
+}
+        //
+        // //call data from Google Analytics Core Reporting API
+        // function runReport(chartConfig) {
+        //     $log.info("runReport ran");
+        //     $log.info("chartConfig:",chartConfig);
+        //     $log.info("chartConfig.ids:",chartConfig.ids);
+        //     $log.info("chartConfig.metrics:",chartConfig.metrics);
+        //     $log.info("chartConfig.start-date:",chartConfig['start-date']);
+        //     $log.info("chartConfig.end-date:",chartConfig['end-date']);
+        //
+        //     var chartConfigData = chartConfig;
+        //
+        //     gapi.client.analytics.data.ga.get(chartConfigData)
+        //     //GA data response
+        //     .then(function(response) {
+        //         console.log("results from chart config:", response);
+        //
+        //         //+use response method to retrieve data and then transform it and
+        //         //build a chart with the data with the runChart function
+        //         // googleData = response.result.rows;
+        //         // transformGoogleData();
+        //         // runChart();
+        //     })
+        //     //GA data response - errors
+        //     .then(function(error) {
+        //         // Log any errors.
+        //         console.log(error);
+        //     });
+        // };
 
         function transformGoogleData() {
             //iterate over data array to prepare data in charting format
