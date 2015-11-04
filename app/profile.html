@@ -16,12 +16,8 @@
 
           <h3>  Update profile preferences</h3>
           <div class="alerts-container">
-              <!-- <pre>
-                  {{alerts | json}}
-              </pre> -->
               <div >
                   <alert ng-repeat="alert in alerts" type="{{alert.type}}" dismiss-on-timeout="{{alert.timeout}}" close="closeAlert($index)">{{alert.message}}</alert>
-
               </div>
           </div>
           <!-- Username input -->

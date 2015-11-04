@@ -58,13 +58,21 @@ angular.module('GA_Dashboard')
         });
 
         var googleData = [];
-        var chartLabels = [];
-        var chartData = [];
+        var rawData = {};
+        var rawDataToTransform = {};
+        var chartData = {
+            chartValues: [],
+            chartLabels: []
+        }
+        // var chartDataLabels = [];
+        // var chartData = [];
 
         var chartUsers = {};
         var chartBounces = {};
 
         var profileId = 4067996;
+        var rawResults = {};
+        var finalChartData = {};
 
         var dashboardCharts = {
 
@@ -77,7 +85,7 @@ angular.module('GA_Dashboard')
                     'dimensions': 'ga:date',
                     'prettyPrint': 'true'
                 },
-                containerId: "showChartUsers",
+                containerId: "chart-1",
                 chartLabel: "User Activity",
                 styles: { }
             },
@@ -90,11 +98,12 @@ angular.module('GA_Dashboard')
                     'dimensions': 'ga:date',
                     'prettyPrint': 'true'
                 },
-                containerId: "showChartUsers",
+                containerId: "chart-2",
                 chartLabel: "User Activity",
                 styles: { }
             },
         };
+        $scope.dCharts = dashboardCharts;
 
         //test to access object data
         $log.log("chartUsers.gaConfig:",dashboardCharts.chartUsers.gaConfig );
@@ -114,7 +123,7 @@ angular.module('GA_Dashboard')
                 $log.log("dashboardCharts.key:",key); //=chartUsers
                 var obj = dashboardCharts[key];
                 for (var prop in obj) {
-                    $log.log("obj.gaConfig:",obj.gaConfig); //=chartUsers.gaConfig
+                    // $log.log("obj.gaConfig:",obj.gaConfig); //=chartUsers.gaConfig
 
                     // $log.log("prop,ojb:",prop+","+obj);
                     // important check that this is objects own property
@@ -152,7 +161,39 @@ function buildChartsLoop () {
             //     }
             // }
 
-            runReport(chartConfigObject['gaConfig']);
+            //A chart is built in 3 steps:
+            // 1) get raw data 2) transform to chart data 3) build chart
+            // use promises to control steps and pass in needed data
+
+            //example Promise Function
+            delay().then(function(v) { // `delay` returns a promise
+                console.log(v); // log the value once it is resolved
+            }).catch(function(v) {
+                // or do something else if it is rejected
+                // (would not happen in this example, since `reject` is not called
+            });
+
+            // getRawData(chartConfigObject['gaConfig']);
+            getRawData(chartConfigObject['gaConfig'])
+            .then(function passRawData(rawData){
+                // rawDataToTransform = rawData;
+                console.log("promise resolved: rawData:",rawData);
+
+                transformRawData(rawData)
+                .then(function passChartData(finalChartData){
+                    console.log("promise2 resolved: finalchartData:",finalChartData);
+
+                    buildChart(finalChartData,chartConfigObject['containerId']);
+
+                })
+
+            })
+            // console.log("finachartdata outside of fn:",finalChartData)
+
+
+            // handleCoreReportingResults();
+            // console.log("coreportingrslts in chart loop:", rawResults);
+            // transformGoogleData(rawResults);
 
             //runtransformData(pass in data)
             //run chartBuilder(pass in data)
@@ -161,170 +202,111 @@ function buildChartsLoop () {
     }
 }
 
-function runReport(chartConfig) {
-    var chartConfigData = chartConfig;
-
-    var apiQuery = gapi.client.analytics.data.ga.get(chartConfigData)
-
-    apiQuery.execute(handleCoreReportingResults);
+function delay() {
+  // `delay` returns a promise
+  return new Promise(function(resolve, reject) {
+    // only `delay` is able to resolve or reject the promise
+    setTimeout(function() {
+      resolve(42); // after 3s, resolve the promise with value 42
+    }, 3000);
+  });
 }
 
-function handleCoreReportingResults(results) {
-    if (!results.error) {
-        console.log("big time results!!!!", results);
-        // Success. Do something cool!
-    } else {
-        alert('There was an error: ' + results.message);
-    }
-}
-        //
-        // //call data from Google Analytics Core Reporting API
-        // function runReport(chartConfig) {
-        //     $log.info("runReport ran");
-        //     $log.info("chartConfig:",chartConfig);
-        //     $log.info("chartConfig.ids:",chartConfig.ids);
-        //     $log.info("chartConfig.metrics:",chartConfig.metrics);
-        //     $log.info("chartConfig.start-date:",chartConfig['start-date']);
-        //     $log.info("chartConfig.end-date:",chartConfig['end-date']);
-        //
-        //     var chartConfigData = chartConfig;
-        //
-        //     gapi.client.analytics.data.ga.get(chartConfigData)
-        //     //GA data response
-        //     .then(function(response) {
-        //         console.log("results from chart config:", response);
-        //
-        //         //+use response method to retrieve data and then transform it and
-        //         //build a chart with the data with the runChart function
-        //         // googleData = response.result.rows;
-        //         // transformGoogleData();
-        //         // runChart();
-        //     })
-        //     //GA data response - errors
-        //     .then(function(error) {
-        //         // Log any errors.
-        //         console.log(error);
-        //     });
-        // };
+function getRawData(chartConfig) {
 
-        function transformGoogleData() {
-            //iterate over data array to prepare data in charting format
-            for (var i = 0; i < googleData.length-1; i++ ) {
-                chartLabels[i] = googleData[i][0];
-                chartData[i] = googleData[i][1];
+    return new Promise(function rawDataFetch(resolve,reject) {
+        var apiQuery = gapi.client.analytics.data.ga.get(chartConfig);
+        // var query = {};
+        // apiQuery.execute(query);
+        // var queryResults = query;
+        // console.log("queryResults:",apiQuery);
+        apiQuery.execute(handleCoreReportingResults);
+
+        function handleCoreReportingResults(results) {
+            if (!results.error) {
+                //call data transformation, passing in Results
+                rawData = results;
+                resolve(rawData);
+                // return handleCoreReportingResults(results);
+                // Success. Do something cool!
+                //transformGoogleData(results);
+                console.log("promise results!!!!", rawData);
+
+            } else {
+                alert('There was an error: ' + results.message);
             }
-            console.log("chartLabels:",chartLabels);
-            console.log("chartData:",chartData);
-        };
+        }
+    });
+};
 
-        function runChart(data) {
-            console.log("runChart-go");
+function transformRawData(rawData) {
+    $log.info("transform function pre-results::", rawData);
+
+    return new Promise(function transformDataFetch(resolve,reject) {
+        console.log("rawData inside promise:rawData.rows:",rawData.rows);
+        //iterate over data array to prepare data in charting format
+        for (var i = 0; i < rawData.rows.length; i++ ) {
+            // console.log('rawData.rows[i][0]:',rawData.rows[i][0]);
+            // console.log('rawData.rows[i][1]:',rawData.rows[i][1]);
+            chartData.chartLabels[i] = rawData.rows[i][0];
+            chartData.chartValues[i] = rawData.rows[i][1];
+            // console.log('chartData.chartLabels[i]:',chartData.chartLabels[i]);
+            // console.log('chartData.chartValues[i]:',chartData.chartValues[i]);
+
+        }
+
+        //chart2 data is overwriting chart1 data here....
+        //stuck here --not getting data into chartData....
+        console.log("chartdata still in promise:", chartData);
+        console.log("chartdata.chartValues still in promise:", chartData.chartValues);
+        console.log("chartdata.chartLabels still in promise:", chartData.chartLabels);
+
+        //passing data as chartData keys separately into this array seems to work
+        var dataArray = [chartData.chartValues,chartData.chartLabels];
+        //resolving chartData by itself as an object gave wrong results
+        //dataValues returned same value twice, e.g. 271, but as chartData.chartValues,
+        //data is correct, 373, 271
+
+        //STILL DOES NOT WORK....NOW IT PASSING IN CHART 1 DATA TWICE, E.G 373
+        //problem is using a promise to send data back - either as object or array;
+        resolve(dataArray);
+    });
+    //Add function to format data labels
+
+
+    // console.log("chartLabels:",chartDataLabels);
+    // console.log("chartData:",chartData);
+    // runChart(chartData);
+};
+
+        function buildChart(chartData,chartId) {
+            console.log("runChart-go: data: ",chartData);
+            console.log("chartId: ",chartId);
+
             //chartJS data input format
             //how to format data labels??
             var data = {
                 // labels: ["January", "February", "March", "April", "May", "June", "July"],
-                labels: chartLabels,
+                labels: chartData.chartLabels,
                 datasets: [
                     {
-                        label: "My First dataset",
+                        label: "Placeholder",
                         fillColor: "rgba(172,209,233,0.5)", //#ACD1E9
                         strokeColor: "rgba(220,220,220,0.8)",
                         highlightFill: "rgba(220,220,220,0.75)",
                         highlightStroke: "rgba(220,220,220,1)",
-                        data: chartData
+                        data: chartData.chartValues
                     }
                 ]
             };
             // Get the context of the canvas element we want to select
             // push data into the Chart
             //there is an .update method if needed to update chart
-            var ctx = document.getElementById("myChart").getContext("2d");
+            var ctx = document.getElementById(chartId).getContext("2d");
             var myBarChart = new Chart(ctx).Bar(data);
 
             // var ctx = document.getElementById("myChart2").getContext("2d");
             // var myBarChart = new Chart(ctx).Bar(data);
-        };
-
-        ///////////REPORT TWO ////////////////////////
-
-        //steps:
-        //runReport to get API response
-        //pass data through transformGoogleData() to format it
-        //runChart to pass data to ChartJS/ into DOM
-
-        var googleData2 = [];
-        var chartLabels2 = [];
-        var chartData2 = [];
-
-        //pull data from Google Analytics Core Reporting API
-        function runReport2() {
-            $log.info("runReport2 ran");
-
-            var profileId = 4067996;
-
-            gapi.client.analytics.data.ga.get({
-                'ids': 'ga:' + profileId,
-                'start-date': timeFrameStart, // //timeFrameStart
-                'end-date': 'today', //timeFrameEnd
-                'metrics': 'ga:bounces',
-                'dimensions': 'ga:date',
-                'prettyPrint': 'true'
-            })
-            //GA data response
-            .then(function(response) {
-                console.log("raw response2", response);
-                //var formattedJson = JSON.stringify(response.result, null, 2);
-                //console.log("formattedJson response", formattedJson);
-
-                // console.log("raw rows 0- 0", response.result.rows[0].array[0]);
-                //console.log("formattedJson - array", response.result.rows[0][0]);
-
-                //use response method to retrieve data and then transform it and
-                //build a chart with the data with the runChart function
-                googleData2 = response.result.rows;
-                transformGoogleData2();
-                runChart2();
-            })
-            //GA data response - errors
-            .then(function(err) {
-                // Log any errors.
-                console.log(err);
-            });
-        };
-
-        function transformGoogleData2() {
-            //iterate over data array to prepare data in charting format
-            for (var i = 0; i < googleData.length-1; i++ ) {
-                chartLabels2[i] = googleData2[i][0];
-                chartData2[i] = googleData2[i][1];
-            }
-            console.log("chartLabels2:",chartLabels2);
-            console.log("chartData2:",chartData2);
-        };
-
-        function runChart2(data) {
-            console.log("runChart-go");
-            //chartJS data input format
-            //how to format data labels??
-            var data = {
-                // labels: ["January", "February", "March", "April", "May", "June", "July"],
-                labels: chartLabels2,
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fillColor: "rgba(172,209,233,0.5)", //#ACD1E9
-                        strokeColor: "rgba(220,220,220,0.8)",
-                        highlightFill: "rgba(220,220,220,0.75)",
-                        highlightStroke: "rgba(220,220,220,1)",
-                        data: chartData2
-                    }
-                ]
-            };
-            // Get the context of the canvas element we want to select
-            // push data into the Chart
-            //there is an .update method if needed to update chart
-            var ctx = document.getElementById("myChart2").getContext("2d");
-            var myBarChart = new Chart(ctx).Bar(data);
         };
 
     }]); //end DashboardCtrl
