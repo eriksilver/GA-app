@@ -101,39 +101,14 @@ angular.module('GA_Dashboard')
                 containerId: "chart-1",
                 chartLabel: "User Activity",
                 styles: { }
-            },
-            "chartBounces": {
-                gaConfig: {
-                    'ids': 'ga:' + profileId,
-                    'start-date': timeFrameStart, // //timeFrameStart
-                    'end-date': 'today', //timeFrameEnd
-                    'metrics': 'ga:bounces',
-                    'dimensions': 'ga:date',
-                    'prettyPrint': 'true'
-                },
-                containerId: "chart-2",
-                chartLabel: "User Activity",
-                styles: { }
-            },
-            "chartSessionDuration": {
-                gaConfig: {
-                    'ids': 'ga:' + profileId,
-                    'start-date': timeFrameStart, // //timeFrameStart
-                    'end-date': 'today', //timeFrameEnd
-                    'metrics': 'ga:avgsessionDuration',
-                    'dimensions': 'ga:date',
-                    'prettyPrint': 'true'
-                },
-                containerId: "chart-3",
-                chartLabel: "User Activity",
-                styles: { }
             }
+
         };
         $scope.dCharts = dashboardCharts;
 
         //test to access object data
         $log.log("chartUsers.gaConfig:",dashboardCharts.chartUsers.gaConfig );
-        $log.log("chartBounces.gaConfig.ids:",dashboardCharts.chartBounces.gaConfig.ids);
+        // $log.log("chartBounces.gaConfig.ids:",dashboardCharts.chartBounces.gaConfig.ids);
 
         //DASHBOARD CHARTS DATA STRUCTURE
         //note: A (key, value) entry in an object is called a property.
