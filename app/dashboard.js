@@ -29,6 +29,7 @@ angular.module('GA_Dashboard')
 
         ///Google Analytics API ready function - waits until API script loads
         gapi.analytics.ready(function() {
+            $log.info("gapi.analytics.ready - run");
             // Step 3: Authorize the user.
 
             //Need to define CLIENT ID and SCOPES
@@ -50,14 +51,21 @@ angular.module('GA_Dashboard')
             //With successful authorization, log response, and call function
             gapi.analytics.auth.on('success', function(response) {
                 console.log("auth response",response);
+
+                //seems like if page is already authorized, then this function isnt being called
                 buildChartsLoop();
-                // runReport();
-                // runReport2();
+            });
+            gapi.analytics.auth.on('error', function(response) {
+                console.log("auth response-error",response);
+
             });
 
         });
 
-        var googleData = [];
+        //call the buildChartsLoop to start
+        buildChartsLoop();
+
+
         var rawData = {};
         var rawDataToTransform = {};
         var chartData = {
@@ -72,6 +80,8 @@ angular.module('GA_Dashboard')
 
         var chartUsers = {};
         var chartBounces = {};
+        var chartSessionDuration = {};
+
 
         var profileId = 4067996;
         var rawResults = {};
@@ -168,17 +178,6 @@ function buildChartsLoop () {
             $log.log("chartConfigObject.gaConfig:",chartConfigObject.gaConfig); //=chartUsers.gaConfig
             $log.log("chartConfigObject WITH ContID:",chartConfigObject.containerId); //=chartUsers.containerId
 
-
-            // for (var prop in chartConfigObject) {
-            //
-            //     // $log.log("prop,ojb:",prop+","+obj);
-            //     // important check that this is objects own property
-            //     // not from prototype prop inherited
-            //     if(obj.hasOwnProperty(prop)){
-            //         // console.log("properties in object:",prop + " = " + obj[prop]);
-            //     }
-            // }
-
             //A chart is built in 3 steps:
             // 1) get raw data 2) transform to chart data 3) build chart
             // use promises to control steps and pass in needed data
@@ -194,7 +193,7 @@ function buildChartsLoop () {
             // getRawData(chartConfigObject['gaConfig']);
             getRawData(chartConfigObject['gaConfig'],chartConfigObject['containerId'])
             .then(function passRawData(rawData){
-                // rawDataToTransform = rawData;
+
                 console.log("promise resolved: rawData:",rawData);
 
                 // .then(function passChartData(finalChartData){
@@ -203,8 +202,9 @@ function buildChartsLoop () {
                 //     buildChart(finalChartData,chartConfigObject['containerId']);
 
                 //same way to call key
-                $log.info("chartConfigObject['containerId']:",chartConfigObject['containerId']);
-                $log.info("chartConfigObject.containerId:",chartConfigObject.containerId);
+                //>>these only display chart-3
+                $log.info("Container ID -after getRawData resolved:",chartConfigObject['containerId']);
+                // $log.info("chartConfigObject.containerId:",chartConfigObject.containerId);
 
                 //needs to go inside the promise, otherwise the fn gets called
                 transformRawData(rawData,chartConfigObject.containerId);
@@ -232,10 +232,7 @@ function getRawData(chartConfig) {
 
     return new Promise(function rawDataFetch(resolve,reject) {
         var apiQuery = gapi.client.analytics.data.ga.get(chartConfig);
-        // var query = {};
-        // apiQuery.execute(query);
-        // var queryResults = query;
-        // console.log("queryResults:",apiQuery);
+
         apiQuery.execute(handleCoreReportingResults);
 
         function handleCoreReportingResults(results) {
@@ -244,8 +241,8 @@ function getRawData(chartConfig) {
                 // rawData = results;
                 resolve(results);
                 // return handleCoreReportingResults(results);
-                // Success. Do something cool!
-                //transformGoogleData(results);
+
+                //transformRawData(results);
                 console.log("promise results!!!!", results);
 
             } else {
@@ -260,29 +257,18 @@ function getRawData(chartConfig) {
 function transformRawData(rawData, chartId) {
     $log.info("transform function pre-results::", rawData);
     //
-    // var chartData = {
-    //     chartValues: [],
-    //     chartLabels: []
-    // }
+
     //iterate over data array to prepare data in charting format
     for (var i = 0; i < rawData.rows.length; i++ ) {
         // console.log('rawData.rows[i][0]:',rawData.rows[i][0]);
         // console.log('rawData.rows[i][1]:',rawData.rows[i][1]);
         chartData.chartLabels[i] = rawData.rows[i][0];
         chartData.chartValues[i] = rawData.rows[i][1];
-        console.log('chartData.chartLabels[i]:',chartData.chartLabels[i]);
-        console.log('chartData.chartValues[i]:',chartData.chartValues[i]);
+        // console.log('chartData.chartLabels[i]:',chartData.chartLabels[i]);
+        // console.log('chartData.chartValues[i]:',chartData.chartValues[i]);
     }
 
     //Add function to format data labels
-
-
-    //stuck here --not getting data into chartData....
-    // console.log("chartdata still in promise:", chartData);
-    // console.log("chartdata.chartValues still in promise:", chartData.chartValues);
-    // console.log("chartdata.chartLabels still in promise:", chartData.chartLabels);
-
-    //chart 1 data is correct, but not building the chart
 
     buildChart(chartData,chartId);
 
@@ -290,10 +276,8 @@ function transformRawData(rawData, chartId) {
 
         function buildChart(chartData,chartId) {
             console.log("runChart-go: data: ",chartData);
-            console.log("chartId: ",chartId);
+            console.log("chartId - inside buildChart: ",chartId);
 
-            //chartJS data input format
-            //how to format data labels??
             var data = {
                 // labels: ["January", "February", "March", "April", "May", "June", "July"],
                 labels: chartData.chartLabels,
