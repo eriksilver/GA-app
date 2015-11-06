@@ -61,9 +61,12 @@ angular.module('GA_Dashboard')
         var rawData = {};
         var rawDataToTransform = {};
         var chartData = {
-            chartValues: [],
-            chartLabels: []
-        }
+            chartLabels: [],
+            chartValues: []
+        };
+
+        // chartData.chartLabels[i] = rawData.rows[i][0];
+        // chartData.chartValues[i] = rawData.rows[i][1];
         // var chartDataLabels = [];
         // var chartData = [];
 
@@ -102,6 +105,19 @@ angular.module('GA_Dashboard')
                 chartLabel: "User Activity",
                 styles: { }
             },
+            "chartSessionDuration": {
+                gaConfig: {
+                    'ids': 'ga:' + profileId,
+                    'start-date': timeFrameStart, // //timeFrameStart
+                    'end-date': 'today', //timeFrameEnd
+                    'metrics': 'ga:avgsessionDuration',
+                    'dimensions': 'ga:date',
+                    'prettyPrint': 'true'
+                },
+                containerId: "chart-3",
+                chartLabel: "User Activity",
+                styles: { }
+            }
         };
         $scope.dCharts = dashboardCharts;
 
@@ -123,7 +139,7 @@ angular.module('GA_Dashboard')
                 $log.log("dashboardCharts.key:",key); //=chartUsers
                 var obj = dashboardCharts[key];
                 for (var prop in obj) {
-                    // $log.log("obj.gaConfig:",obj.gaConfig); //=chartUsers.gaConfig
+                    $log.log("obj.containerId:",obj.containerId); //=chartUsers.gaConfig
 
                     // $log.log("prop,ojb:",prop+","+obj);
                     // important check that this is objects own property
@@ -150,6 +166,8 @@ function buildChartsLoop () {
             //For each of the dashboard charts - do stuff
             var chartConfigObject = dashboardCharts[key];
             $log.log("chartConfigObject.gaConfig:",chartConfigObject.gaConfig); //=chartUsers.gaConfig
+            $log.log("chartConfigObject WITH ContID:",chartConfigObject.containerId); //=chartUsers.containerId
+
 
             // for (var prop in chartConfigObject) {
             //
@@ -174,29 +192,27 @@ function buildChartsLoop () {
             });
 
             // getRawData(chartConfigObject['gaConfig']);
-            getRawData(chartConfigObject['gaConfig'])
+            getRawData(chartConfigObject['gaConfig'],chartConfigObject['containerId'])
             .then(function passRawData(rawData){
                 // rawDataToTransform = rawData;
                 console.log("promise resolved: rawData:",rawData);
 
-                transformRawData(rawData)
-                .then(function passChartData(finalChartData){
-                    console.log("promise2 resolved: finalchartData:",finalChartData);
+                // .then(function passChartData(finalChartData){
+                //     console.log("promise2 resolved: finalchartData:",finalChartData);
+                //
+                //     buildChart(finalChartData,chartConfigObject['containerId']);
 
-                    buildChart(finalChartData,chartConfigObject['containerId']);
+                //same way to call key
+                $log.info("chartConfigObject['containerId']:",chartConfigObject['containerId']);
+                $log.info("chartConfigObject.containerId:",chartConfigObject.containerId);
 
-                })
+                //needs to go inside the promise, otherwise the fn gets called
+                transformRawData(rawData,chartConfigObject.containerId);
 
-            })
-            // console.log("finachartdata outside of fn:",finalChartData)
-
-
-            // handleCoreReportingResults();
-            // console.log("coreportingrslts in chart loop:", rawResults);
-            // transformGoogleData(rawResults);
-
-            //runtransformData(pass in data)
-            //run chartBuilder(pass in data)
+            }).catch(function passRawData(rawData) {
+                // or do something else if it is rejected
+                console.log("getRawData catch:rawData",rawData);
+            });
 
         }
     }
@@ -225,58 +241,51 @@ function getRawData(chartConfig) {
         function handleCoreReportingResults(results) {
             if (!results.error) {
                 //call data transformation, passing in Results
-                rawData = results;
-                resolve(rawData);
+                // rawData = results;
+                resolve(results);
                 // return handleCoreReportingResults(results);
                 // Success. Do something cool!
                 //transformGoogleData(results);
-                console.log("promise results!!!!", rawData);
+                console.log("promise results!!!!", results);
 
             } else {
                 alert('There was an error: ' + results.message);
             }
         }
+
+
     });
 };
 
-function transformRawData(rawData) {
+function transformRawData(rawData, chartId) {
     $log.info("transform function pre-results::", rawData);
+    //
+    // var chartData = {
+    //     chartValues: [],
+    //     chartLabels: []
+    // }
+    //iterate over data array to prepare data in charting format
+    for (var i = 0; i < rawData.rows.length; i++ ) {
+        // console.log('rawData.rows[i][0]:',rawData.rows[i][0]);
+        // console.log('rawData.rows[i][1]:',rawData.rows[i][1]);
+        chartData.chartLabels[i] = rawData.rows[i][0];
+        chartData.chartValues[i] = rawData.rows[i][1];
+        console.log('chartData.chartLabels[i]:',chartData.chartLabels[i]);
+        console.log('chartData.chartValues[i]:',chartData.chartValues[i]);
+    }
 
-    return new Promise(function transformDataFetch(resolve,reject) {
-        console.log("rawData inside promise:rawData.rows:",rawData.rows);
-        //iterate over data array to prepare data in charting format
-        for (var i = 0; i < rawData.rows.length; i++ ) {
-            // console.log('rawData.rows[i][0]:',rawData.rows[i][0]);
-            // console.log('rawData.rows[i][1]:',rawData.rows[i][1]);
-            chartData.chartLabels[i] = rawData.rows[i][0];
-            chartData.chartValues[i] = rawData.rows[i][1];
-            // console.log('chartData.chartLabels[i]:',chartData.chartLabels[i]);
-            // console.log('chartData.chartValues[i]:',chartData.chartValues[i]);
-
-        }
-
-        //chart2 data is overwriting chart1 data here....
-        //stuck here --not getting data into chartData....
-        console.log("chartdata still in promise:", chartData);
-        console.log("chartdata.chartValues still in promise:", chartData.chartValues);
-        console.log("chartdata.chartLabels still in promise:", chartData.chartLabels);
-
-        //passing data as chartData keys separately into this array seems to work
-        var dataArray = [chartData.chartValues,chartData.chartLabels];
-        //resolving chartData by itself as an object gave wrong results
-        //dataValues returned same value twice, e.g. 271, but as chartData.chartValues,
-        //data is correct, 373, 271
-
-        //STILL DOES NOT WORK....NOW IT PASSING IN CHART 1 DATA TWICE, E.G 373
-        //problem is using a promise to send data back - either as object or array;
-        resolve(dataArray);
-    });
     //Add function to format data labels
 
 
-    // console.log("chartLabels:",chartDataLabels);
-    // console.log("chartData:",chartData);
-    // runChart(chartData);
+    //stuck here --not getting data into chartData....
+    // console.log("chartdata still in promise:", chartData);
+    // console.log("chartdata.chartValues still in promise:", chartData.chartValues);
+    // console.log("chartdata.chartLabels still in promise:", chartData.chartLabels);
+
+    //chart 1 data is correct, but not building the chart
+
+    buildChart(chartData,chartId);
+
 };
 
         function buildChart(chartData,chartId) {
