@@ -8,7 +8,6 @@ angular.module('GA_Dashboard')
     function($scope, $firebaseAuth, $state, $log) {
         $log.log("DashboardCtrl ran");
 
-
         //SET page variables
         var rawData = {};
         var chartData = {
@@ -25,9 +24,9 @@ angular.module('GA_Dashboard')
 
         var profileId = 4067996;
 
-        $scope.chartType = "chartUsers";
+        $scope.chartType = "ga:users";
         //set default chartType
-        var currentChartType = "ga:users"; //$scope.chartType;
+        var currentChartType = "$scope.chartType"; //$scope.chartType;
 
         //Handle View Chart Time Frame
         //set chartTimeFrame default value
@@ -62,12 +61,9 @@ angular.module('GA_Dashboard')
                         gapi.analytics.auth.on('success', function(response) {
                             $log.log("auth call made");
                             console.log("auth response",response);
-                            $log.info("currentTimeFrame:",currentTimeFrame);
+                            $log.info("gapi-auth: currentTimeFrame, currentChartType:",currentTimeFrame,currentChartType);
 
-                            // setTimeFrameStart(currentTimeFrame,currentChartType);
-                            setTimeFrameStart(currentTimeFrame,currentChartType);
-
-                            // getRawData(currentChartType);
+                            getRawData(currentTimeFrame,currentChartType);
                         });
 
                         gapi.analytics.auth.on('error', function(response) {
@@ -78,21 +74,19 @@ angular.module('GA_Dashboard')
                     });
                 }
 
-
-
-
-
         //using $scope watch to see when the chartTimeFrame button is Updated
         //**issue I think with .foreach where it is iterating on the time frame name by
         //the amount of letters in the world, e.g. sixty = 5, thirty = 6
         $scope.$watch('chartTimeFrame', function (newVal, oldVal) {
-            $log.info("scope watch passing vals:",newVal,oldVal);
+            $log.info("scope watch-CharttimeFrame- passing vals:",newVal,oldVal);
 
             if (newVal !== oldVal) {
                 $log.log("new val doesnt equal old val");
                 currentTimeFrame = newVal;
                 // apiReadyWrapper();
-                setTimeFrameStart(currentTimeFrame,currentChartType);
+                // setTimeFrameStart(currentTimeFrame,currentChartType);
+                getRawData(currentTimeFrame,currentChartType);
+
             }
             else {
                 $log.log("use old/current val");
@@ -101,18 +95,24 @@ angular.module('GA_Dashboard')
                 // setTimeFrameStart(currentTimeFrame,currentChartType);
             }
         });
-        // debugger
-        // $scope.$watch('chartTimeFrame', function () {
-        //     angular.forEach($scope.chartTimeFrame, function (value, key) {
-        //         if (value) {
-        //             timeFrameStart = $scope.chartTimeFrame + "daysAgo";
-        //             $log.log("scope-watch-timeFrameStart:",  timeFrameStart);
-        //
-        //             setTimeFrameStart(timeFrameStart);
-        //
-        //         }
-        //     });
-        // });
+
+        $scope.$watch('chartType', function (newVal, oldVal) {
+            $log.info("scope watch -chartType - passing vals:",newVal,oldVal);
+
+            if (newVal !== oldVal) {
+                $log.log("chartType - new val doesnt equal old val");
+                currentChartType = newVal;
+
+                getRawData(currentTimeFrame,currentChartType);
+
+            }
+            else {
+                $log.log("chartType- use old/current val");
+                currentChartType = oldVal;
+                apiReadyWrapper();
+
+            }
+        });
 
         //Handle View Chart Type Frame
         //set chartType default value
@@ -141,41 +141,41 @@ angular.module('GA_Dashboard')
         $log.info("check timeFrame:",currentTimeFrame);
 
 
-        function setTimeFrameStart(currentTimeFrame,currentChartType) {
-            $log.info("setTimeFrameStart-fn-run:", currentTimeFrame);
-// debugger
-            // if (timeFrameStart == '7') {
-            //     setTimeFrame = timeFrameStart + "daysAgo";
-            // }
-            // switch(currentChartType) {
-                // case 'chartUsers':
-                // return 'ga:users';
-                // case 'chartBounces':
-                // return 'ga:bounces';
-                // case 'chartSessionDuration':
-                // return 'ga:avgsessionDuration';
-            // }
-            getRawData(currentTimeFrame,currentChartType);
-
-        };
-
-        function setChartType(currentChartType) {
-            $log.info("setChartType-fn-run:", currentChartType);
-
-            if (currentChartType == 'chartUsers') {
-                gaChartType = 'ga:users';
-            }
-            // switch(currentChartType) {
-                // case 'chartUsers':
-                // return 'ga:users';
-                // case 'chartBounces':
-                // return 'ga:bounces';
-                // case 'chartSessionDuration':
-                // return 'ga:avgsessionDuration';
-            // }
-            getRawData(currentTimeFrame,gaChartType);
-
-        };
+//         function setTimeFrameStart(currentTimeFrame,currentChartType) {
+//             $log.info("setTimeFrameStart-fn-run:", currentTimeFrame);
+// // debugger
+//             // if (timeFrameStart == '7') {
+//             //     setTimeFrame = timeFrameStart + "daysAgo";
+//             // }
+//             // switch(currentChartType) {
+//                 // case 'chartUsers':
+//                 // return 'ga:users';
+//                 // case 'chartBounces':
+//                 // return 'ga:bounces';
+//                 // case 'chartSessionDuration':
+//                 // return 'ga:avgsessionDuration';
+//             // }
+//             getRawData(currentTimeFrame,currentChartType);
+//
+//         };
+//
+//         function setChartType(currentChartType) {
+//             $log.info("setChartType-fn-run:", currentChartType);
+//
+//             if (currentChartType == 'chartUsers') {
+//                 gaChartType = 'ga:users';
+//             }
+//             // switch(currentChartType) {
+//                 // case 'chartUsers':
+//                 // return 'ga:users';
+//                 // case 'chartBounces':
+//                 // return 'ga:bounces';
+//                 // case 'chartSessionDuration':
+//                 // return 'ga:avgsessionDuration';
+//             // }
+//             getRawData(currentTimeFrame,gaChartType);
+//
+//         };
 
         // $log.info('gaChartType:',gaChartType);
 

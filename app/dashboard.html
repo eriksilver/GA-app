@@ -17,11 +17,11 @@
     </div>
     <div class="btn-group">
         <label class="btn btn-primary" uncheckable>Chart:</label>
-        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'chartUsers'">Users
+        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'ga:users'">Users
         </label>
-        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'chartBounces'">Bounces
+        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'ga:bounces'">Bounces
         </label>
-        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'chartSessionDuration'">Session Duration
+        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'ga:avgsessionDuration'">Session Duration
     </div>
     <pre>{{chartTimeFrame || 'null'}}</pre>
     <pre>{{chartType || 'null'}}</pre>
