@@ -87,15 +87,15 @@ angular.module('GA_Dashboard')
         //the amount of letters in the world, e.g. sixty = 5, thirty = 6
         $scope.$watch('chartTimeFrame', function (newVal, oldVal) {
             $log.info("scope watch passing vals:",newVal,oldVal);
-            $log.info("scope watch passing vals:",newVal);
 
             if (newVal !== oldVal) {
-                // $log.log("scope-watch-timeFrameStart:",  timeFrameStart);
+                $log.log("new val doesnt equal old val");
                 currentTimeFrame = newVal;
-                apiReadyWrapper();
-                // setTimeFrameStart(currentTimeFrame,currentChartType);
+                // apiReadyWrapper();
+                setTimeFrameStart(currentTimeFrame,currentChartType);
             }
             else {
+                $log.log("use old/current val");
                 currentTimeFrame = oldVal;
                 apiReadyWrapper();
                 // setTimeFrameStart(currentTimeFrame,currentChartType);
@@ -187,7 +187,7 @@ angular.module('GA_Dashboard')
             $log.info('fn-getRaw-profileId:',profileId);
             $log.info('fn-getRaw-currentChartType:',currentChartType);
 
-            debugger
+                // debugger
 
             var apiQuery = gapi.client.analytics.data.ga.get({
                 'ids': 'ga:' + profileId,
@@ -216,7 +216,7 @@ angular.module('GA_Dashboard')
                     console.log('There was an error: ' + results);
 
                 }
-debugger
+// debugger
 
             }
         };
