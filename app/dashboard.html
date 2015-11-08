@@ -6,32 +6,39 @@
 
     <div class="btn-group">
         <label class="btn btn-primary" uncheckable>Days:</label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'7'">7
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'7daysAgo'">7
         </label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'14'">14
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'14daysAgo'">14
         </label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'30'">30
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'30daysAgo'">30
         </label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'60'">60
+        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'60daysAgo'">60
         </label>
     </div>
+    <div class="btn-group">
+        <label class="btn btn-primary" uncheckable>Chart:</label>
+        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'chartUsers'">Users
+        </label>
+        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'chartBounces'">Bounces
+        </label>
+        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'chartSessionDuration'">Session Duration
+    </div>
     <pre>{{chartTimeFrame || 'null'}}</pre>
+    <pre>{{chartType || 'null'}}</pre>
+
 
     <section id="auth-button"></section>
 
 
-    <!-- <h3>{{chart.title}}</h3>
-    <canvas id="chart-1" width="800" height="400"></canvas>
-    <h3>{{chart2.title}}</h3>
-    <canvas id="chart-2" width="800" height="400"></canvas>
-    <h3>{{chart3.title}}</h3>
-    <canvas id="chart-3" width="800" height="400"></canvas> -->
+    <h3>{{chart.title}}</h3>
+    <canvas id="barChart" width="800" height="400"></canvas>
 
-    <ul id=chartsList>
+    <!--Use this if multiple charts are implemented
+     <ul id=chartsList>
         <li ng-repeat="chart in dCharts">
             {{chart | json }}
             {{$index + 1 }}
             <canvas id="chart-{{ $index + 1 }}" width="800" height="400"></canvas>
         </li>
-    </ul>
+    </ul> -->
 </div>
