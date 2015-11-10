@@ -24,8 +24,34 @@ angular.module('GA_Dashboard')
         //currentTimeFrame value equals value from the view
         var currentTimeFrame = "$scope.chartTimeFrame";
 
+
         //manually set ga account profile
-        var profileId = 4067996;
+        // var profileId = ga:4067996;
+        var profileId = "";
+        function viewSelectorWrapper() {
+            var viewSelector = new gapi.analytics.ViewSelector({
+                container: 'view-selector'
+            });
+            $log.log("gapi viewSelector run");
+
+            viewSelector.execute();
+
+            viewSelector.on('change', function(ids) {
+                var newIds = {
+                    query: {
+                        ids: ids
+                    }
+                }
+                profileId = viewSelector.ids;
+                $log.info("profileID from viewSelector", viewSelector.ids);
+
+
+                getRawData(currentTimeFrame,currentChartType);
+
+            });
+
+        }
+
 
         //set chartJS global defaults
         Chart.defaults.global.responsive = true;
@@ -46,6 +72,9 @@ angular.module('GA_Dashboard')
                     scope: SCOPES,
                 };
 
+
+
+
                 //pass in authorizing data
                 gapi.analytics.auth.authorize(authData,{
 
@@ -55,8 +84,7 @@ angular.module('GA_Dashboard')
                 gapi.analytics.auth.on('success', function(response) {
                     $log.info("auth response",response);
                     $log.info("gapi-auth: currentTimeFrame, currentChartType:",currentTimeFrame,currentChartType);
-
-                    getRawData(currentTimeFrame,currentChartType);
+                    viewSelectorWrapper();
                 });
 
                 gapi.analytics.auth.on('error', function(response) {
@@ -71,6 +99,7 @@ angular.module('GA_Dashboard')
         $scope.$watch('chartTimeFrame', function (newVal, oldVal) {
             $log.info("scope watch-CharttimeFrame- passing vals:",newVal,oldVal);
 
+            //if chartTimeFrame has been updated
             if (newVal !== oldVal) {
                 $log.log("new val doesnt equal old val");
                 currentTimeFrame = newVal;
@@ -79,10 +108,13 @@ angular.module('GA_Dashboard')
                 getRawData(currentTimeFrame,currentChartType);
 
             }
+            //if chartTimeFrame has NOT been updated
             else {
                 $log.log("use old/current val");
                 currentTimeFrame = oldVal;
-                apiReadyWrapper();
+                getRawData(currentTimeFrame,currentChartType);
+
+                // apiReadyWrapper();
                 // setTimeFrameStart(currentTimeFrame,currentChartType);
             }
         });
@@ -107,13 +139,14 @@ angular.module('GA_Dashboard')
         });
 
         function getRawData(currentTimeFrame,currentChartType) {
+
             //log data to make sure getting passed in correctly
             $log.info('fn-getRaw-currentTimeFrame:',currentTimeFrame);
             $log.info('fn-getRaw-currentChartType:',currentChartType);
             $log.info('fn-getRaw-profileId:',profileId);
 
             var apiQuery = gapi.client.analytics.data.ga.get({
-                'ids': 'ga:' + profileId,
+                'ids': profileId,
                 'start-date': currentTimeFrame, //'2015-10-15',
                 'end-date': 'yesterday',
                 'metrics': currentChartType,

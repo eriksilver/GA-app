@@ -23,13 +23,15 @@
         </label>
         <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'avgsessionDuration'">Session Duration
     </div>
-    <pre>{{chartTimeFrame || 'null'}}</pre>
-    <pre>{{chartType || 'null'}}</pre>
+    <!-- <pre>{{chartTimeFrame || 'null'}}</pre>
+    <pre>{{chartType || 'null'}}</pre> -->
 
 
     <section id="auth-button"></section>
+    <section id="view-selector"></section>
 
-    <h4>{{chartType | uppercase }}</h4>
+
+    <!-- <h4>{{chartType | uppercase }}</h4> -->
     <canvas id="barChart" width="800" height="400"></canvas>
 
     <!--Use this if multiple charts are implemented
