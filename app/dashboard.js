@@ -25,6 +25,8 @@ angular.module('GA_Dashboard')
         var currentTimeFrame = "$scope.chartTimeFrame";
 
 
+        apiReadyWrapper();
+        
         //manually set ga account profile
         // var profileId = ga:4067996;
         var profileId = "";
@@ -45,12 +47,9 @@ angular.module('GA_Dashboard')
                 profileId = viewSelector.ids;
                 $log.info("profileID from viewSelector", viewSelector.ids);
 
-
                 getRawData(currentTimeFrame,currentChartType);
-
             });
-
-        }
+        };
 
 
         //set chartJS global defaults
@@ -125,16 +124,16 @@ angular.module('GA_Dashboard')
 
             if (newVal !== oldVal) {
                 $log.log("chartType - new val doesnt equal old val");
-                currentChartType = 'ga:' + newVal;
 
+                currentChartType = 'ga:' + newVal;
                 getRawData(currentTimeFrame,currentChartType);
 
             }
             else {
                 $log.log("chartType- use old/current val");
-                currentChartType = 'ga:' + oldVal;
-                apiReadyWrapper();
 
+                currentChartType = 'ga:' + oldVal;
+                getRawData(currentTimeFrame,currentChartType);
             }
         });
 

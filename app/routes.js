@@ -13,7 +13,6 @@ angular.module('GA_Dashboard')
       .state('welcome', {
         url: '/',
         templateUrl: 'app/welcome.html',
-        //controller: 'ApplicationController',
         data: {
           requireLogin: false
         }
