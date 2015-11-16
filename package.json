@@ -1,10 +1,10 @@
 {
-  "name": "ga-app",
+  "name": "gaApp",
   "version": "1.0.0",
   "description": "Analytics Dashboard",
   "main": "app.js",
   "scripts": {
-    "start": "http-server",
+    /*"start": "http-server",*/
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
