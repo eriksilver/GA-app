@@ -1,13 +1,15 @@
 {
   "name": "gaApp",
   "version": "1.0.0",
-  "description": "Analytics Dashboard",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "Google Analytics Dashboard",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.13.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/eriksilver/GA-app/issues"
   },
-  "homepage": "https://github.com/eriksilver/GA-app",
-  "engines": {
-    "node": "0.10.x"
-  }
+  "homepage": "https://github.com/eriksilver/GA-app"
 }
