@@ -8,9 +8,10 @@ app.use(express.static('public'));
 //define a port
 var port = 8000;
 //the listen method binds and listens for connections on the specified host and port
-app.listen(port, function() {
+app.listen(process.env.PORT || 8000, function() {
     console.log('app listening on port ' + port);
 });
+
 //Routes HTTP GET requests to the specified path with the specified callback functions
 //here '*' is the path we want to get, which is a catch-all route
 //since we have a single page application (SPA) architecture, we are using Angular
