@@ -4,7 +4,6 @@
   "description": "Analytics Dashboard",
   "main": "app.js",
   "scripts": {
-    /*"start": "http-server",*/
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
