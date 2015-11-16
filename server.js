@@ -1,38 +1,25 @@
+//Use the Node module 'Express'
 var express = require('express');
-
-var server = express();
-// server.use(express.static(__dirname + '/public'));
-server.use(express.static(__ga-app));
-
-
-var port = 10001;
-server.listen(port, function() {
-    console.log('server listening on port ' + port);
+//Define variable app to use methods of the Express function
+var app = express();
+//express.static is built-in middleware to server static files, 'public' is the name of the directory
+//that holds the files to published
+app.use(express.static('public'));
+//define a port
+var port = 8000;
+//the listen method binds and listens for connections on the specified host and port
+app.listen(port, function() {
+    console.log('app listening on port ' + port);
 });
-
-//alternative option from Scotch.io
-//https://scotch.io/tutorials/how-to-deploy-a-node-js-app-to-heroku
-
-// var express = require('express');
-// var app = express();
-//
-// // set the port of our application
-// // process.env.PORT lets the port be set by Heroku
-// var port = process.env.PORT || 8080;
-//
-// // set the view engine to ejs
-// app.set('view engine', 'ejs');
-//
-// // make express look in the public directory for assets (css/js/img)
-// app.use(express.static(__dirname + '/public'));
-//
-// // set the home page route
-// app.get('/', function(req, res) {
-//
-//     // ejs render automatically looks in the views folder
-//     res.render('index');
-// });
-//
-// app.listen(port, function() {
-//     console.log('Our app is running on http://localhost:' + port);
-// });
+//Routes HTTP GET requests to the specified path with the specified callback functions
+//here '*' is the path we want to get, which is a catch-all route
+//since we have a single page application (SPA) architecture, we are using Angular
+//to do the routing and we just need the Express server to have a single entry point into the
+//application, which is through the index.html file
+app.get('*', function(req, res) {
+    //__dirname is a special word to access the local file + public/index.html is the
+    //directory for the published files
+    //the sendFile method transfers the file that is the single point of entry
+    //Transfers the file at the given path.
+    res.sendFile(__dirname + "/public/index.html");
+});
