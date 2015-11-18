@@ -5,10 +5,12 @@ var app = express();
 //express.static is built-in middleware to server static files, 'public' is the name of the directory
 //that holds the files to published
 app.use(express.static('public'));
-//define a port
-var port = 8000;
+
+//define port -Heroku will get random port each time app is run
+//when running locally, 'forego start' will use .env file to define port 
+var port = process.env.PORT;
 //the listen method binds and listens for connections on the specified host and port
-app.listen(process.env.PORT || 8000, function() {
+app.listen(port, function() {
     console.log('app listening on port ' + port);
 });
 
