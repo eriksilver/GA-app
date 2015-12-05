@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="GA_Dashboard">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,13 +11,15 @@
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="bower_components/bootstrap/dist/css/custom.css" rel="stylesheet">
 
-
+    <!-- Custom Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" >
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
     <!  -- Angular -->
@@ -31,30 +33,92 @@
     <!-- load Keen IO -->
     <script src="https://d26b395fwzu5fz.cloudfront.net/3.2.7/keen.min.js" type="text/javascript"></script>
     <base href="/" />
-  </head>
+</head>
 
 
 
-  <body>
-    <div class="container">
+<body>
+    <!-- <div class="container">
         <div class="page-header">
-          <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
+            <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
         </div>
         <ul class="nav nav-pills">
             <li role="presentation"><a ui-sref="welcome">Welcome</a></li>
             <li role="presentation"><a ui-sref="login">Login</a></li>
             <li role="presentation"><a ui-sref="dashboard">Dashboard</a></li>
             <li role="presentation"><a ui-sref="profile">Profile</a></li>
-            <!-- <li role="presentation"><a ui-sref="test">GA Test page</a></li> -->
-
         </ul>
-
 
         <main ui-view></main>
 
+    </div>  -->
 
-    </div> <!--container-->
+    <!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li class="sidebar-brand">
+                <a href="#top"  onclick = $("#menu-close").click(); >Dashboard</a>
+            </li>
+            <li>
+                <a href="#top" onclick = $("#menu-close").click(); >Home</a>
+            </li>
+            <li>
+                <a href="#about" onclick = $("#menu-close").click(); >About</a>
+            </li>
+            <li>
+                <a href="#services" onclick = $("#menu-close").click(); >Services</a>
+            </li>
+            <li>
+                <a href="#portfolio" onclick = $("#menu-close").click(); >Portfolio</a>
+            </li>
+            <li>
+                <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
+            </li>
+        </ul>
+    </nav>
 
+  <header class="header">
+  <div class="text-vertical-center">
+    <h1>Analytics Dashboard</h1>
+    <h3>Simple charts to digest your Google Analytics</i></h3>
+    <br>
+    <a class="btn btn-dark btn-lg">Get Started</a>
+  </div>
+</header>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+               <!--     <h4><strong>Analytics Dashboard</strong>
+                    </h4>-->
+                  <!--  <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>-->
+                    <!--<ul class="list-unstyled">
+                        <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
+                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">name@example.com</a>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
+                        </li>
+                    </ul>-->
+                    <!--<hr class="small">-->
+                    <p class="text-muted">Copyright &copy; Analytics Dashboard 2014</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -66,27 +130,37 @@
     <script src="bower_components/moment/moment.js"></script>
 
 
-    <!-- JS files -->
+
+    <!-- Google Analytics API ready script -->
     <script>
     (function(w,d,s,g,js,fjs){
-      g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
-      js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
-      js.src='https://apis.google.com/js/platform.js';
-      fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+        g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+        js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+        js.src='https://apis.google.com/js/platform.js';
+        fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
     }(window,document,'script'));
     </script>
 
+    <!-- Welcome page navigation | custom javascript -->
+    <script>
+    //closes the sidebar menu
+    $("#menu-close").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+    </script>
+
+    <!-- Load page JS files  -->
     <script src="/app/app.js"></script>
     <script src="/app/routes.js"></script>
     <script src="/app/login.js"></script>
     <script src="/app/dashboard.js"></script>
     <script src="/app/profile.js"></script>
 
-
-    <!-- When the library is fully loaded, any callbacks passed to gapi.analytics.ready will be invoked -->
-    <script>
-
-    </script>
-
-  </body>
+</body>
 </html>
