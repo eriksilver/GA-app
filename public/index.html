@@ -39,128 +39,120 @@
 
 <body>
     <!-- <div class="container">
-        <div class="page-header">
-            <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
-        </div>
-        <ul class="nav nav-pills">
-            <li role="presentation"><a ui-sref="welcome">Welcome</a></li>
-            <li role="presentation"><a ui-sref="login">Login</a></li>
-            <li role="presentation"><a ui-sref="dashboard">Dashboard</a></li>
-            <li role="presentation"><a ui-sref="profile">Profile</a></li>
-        </ul>
+    <div class="page-header">
+    <h1>Google Analytics Dashboard <small>Useful Analytics at Your Fingertips</small></h1>
+</div>
+<ul class="nav nav-pills">
+<li role="presentation"><a ui-sref="welcome">Welcome</a></li>
+<li role="presentation"><a ui-sref="login">Login</a></li>
+<li role="presentation"><a ui-sref="dashboard">Dashboard</a></li>
+<li role="presentation"><a ui-sref="profile">Profile</a></li>
+</ul>
+</div>  -->
 
-        <main ui-view></main>
+<!-- Navigation -->
+<a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+<nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+        <li class="sidebar-brand">
+            <a ui-sref="welcome" onclick = $("#menu-close").click(); >Welcome</a>
+        </li>
+        <li>
+            <a ui-sref="login" onclick = $("#menu-close").click(); >login</a>
+        </li>
+        <li>
+            <a ui-sref="dashboard" onclick = $("#menu-close").click(); >dashboard</a>
+        </li>
+        <li>
+            <a ui-sref="profile" onclick = $("#menu-close").click(); >profile</a>
+        </li>
+    </ul>
+</nav>
+<div class="header">
+    <div class="text-vertical-center">
+        <h1>Analytics Dashboard</h1>
+        <h3>Simple charts for your Google Analytics</i></h3>
+    </div>
+</div>
 
-    </div>  -->
 
-    <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-                <a href="#top"  onclick = $("#menu-close").click(); >Dashboard</a>
-            </li>
-            <li>
-                <a href="#top" onclick = $("#menu-close").click(); >Home</a>
-            </li>
-            <li>
-                <a href="#about" onclick = $("#menu-close").click(); >About</a>
-            </li>
-            <li>
-                <a href="#services" onclick = $("#menu-close").click(); >Services</a>
-            </li>
-            <li>
-                <a href="#portfolio" onclick = $("#menu-close").click(); >Portfolio</a>
-            </li>
-            <li>
-                <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
-            </li>
-        </ul>
-    </nav>
+<main ui-view></main>
 
-  <header class="header">
-  <div class="text-vertical-center">
-    <h1>Analytics Dashboard</h1>
-    <h3>Simple charts to digest your Google Analytics</i></h3>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 text-center">
+                <!--     <h4><strong>Analytics Dashboard</strong>
+            </h4>-->
+            <!--  <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>-->
+            <!--<ul class="list-unstyled">
+            <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
+            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">name@example.com</a>
+        </li>
+    </ul>
     <br>
-    <a class="btn btn-dark btn-lg">Get Started</a>
-  </div>
-</header>
+    <ul class="list-inline">
+    <li>
+    <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+</li>
+<li>
+<a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+</li>
+<li>
+<a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
+</li>
+</ul>-->
+<!--<hr class="small">-->
+<br>
+<p class="text-muted">Copyright &copy; Analytics Dashboard</p>
+</div>
+</div>
+</div>
+</footer>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 col-lg-offset-1 text-center">
-               <!--     <h4><strong>Analytics Dashboard</strong>
-                    </h4>-->
-                  <!--  <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>-->
-                    <!--<ul class="list-unstyled">
-                        <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
-                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">name@example.com</a>
-                        </li>
-                    </ul>
-                    <br>
-                    <ul class="list-inline">
-                        <li>
-                            <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
-                        </li>
-                    </ul>-->
-                    <!--<hr class="small">-->
-                    <p class="text-muted">Copyright &copy; Analytics Dashboard 2014</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/Chart.js/Chart.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/Chart.js/Chart.js"></script>
+<script src="bower_components/moment/moment.js"></script>
 
 
 
-    <!-- Google Analytics API ready script -->
-    <script>
-    (function(w,d,s,g,js,fjs){
-        g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
-        js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
-        js.src='https://apis.google.com/js/platform.js';
-        fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
-    }(window,document,'script'));
-    </script>
+<!-- Google Analytics API ready script -->
+<script>
+(function(w,d,s,g,js,fjs){
+    g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+    js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+    js.src='https://apis.google.com/js/platform.js';
+    fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+}(window,document,'script'));
+</script>
 
-    <!-- Welcome page navigation | custom javascript -->
-    <script>
-    //closes the sidebar menu
-    $("#menu-close").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-    // Opens the sidebar menu
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-    </script>
+<!-- Welcome page navigation | custom javascript -->
+<script>
+//closes the sidebar menu
+$("#menu-close").click(function(e) {
+    e.preventDefault();
+    $("#sidebar-wrapper").toggleClass("active");
+});
+// Opens the sidebar menu
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#sidebar-wrapper").toggleClass("active");
+});
+</script>
 
-    <!-- Load page JS files  -->
-    <script src="/app/app.js"></script>
-    <script src="/app/routes.js"></script>
-    <script src="/app/login.js"></script>
-    <script src="/app/dashboard.js"></script>
-    <script src="/app/profile.js"></script>
+<!-- Load page JS files  -->
+<script src="/app/app.js"></script>
+<script src="/app/routes.js"></script>
+<script src="/app/login.js"></script>
+<script src="/app/dashboard.js"></script>
+<script src="/app/profile.js"></script>
 
 </body>
 </html>

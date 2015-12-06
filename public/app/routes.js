@@ -8,10 +8,11 @@ angular.module('GA_Dashboard')
 
     });
     // For any unmatched url, send to /
-    // $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/welcome');
+    
     $stateProvider
       .state('welcome', {
-        url: '/',
+        url: '/welcome',
         templateUrl: 'app/welcome.html',
         data: {
           requireLogin: false
