@@ -12,7 +12,9 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //     $logProvider.debugEnabled(true);
 });
 
-myApp.controller
+myApp.controller("AppCtrl", ["$scope", function($scope){
+$scope.date = new Date();    
+}])
 
 myApp.factory("AlertService", ["$log",
 function($log) {
