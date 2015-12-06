@@ -12,24 +12,26 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //     $logProvider.debugEnabled(true);
 });
 
+myApp.controller
+
 myApp.factory("AlertService", ["$log",
-    function($log) {
-        var alerts = [];
+function($log) {
+    var alerts = [];
 
-        function add_alert(alert) {
-            alerts.push(alert);
-        }
-
-        function remove_alert(index) {
-            alerts.splice(index, 1);
-        }
-
-        return {
-                alerts: alerts,
-                add: add_alert,
-                remove: remove_alert,
-        };
+    function add_alert(alert) {
+        alerts.push(alert);
     }
+
+    function remove_alert(index) {
+        alerts.splice(index, 1);
+    }
+
+    return {
+        alerts: alerts,
+        add: add_alert,
+        remove: remove_alert,
+    };
+}
 ])
 
 myApp.service('currentUser', ['$log', '$firebaseAuth', '$firebaseArray', '$q','$rootScope',
@@ -204,5 +206,8 @@ myApp.run(["$rootScope", "$state", "$log", "currentUser", function ($rootScope, 
             $state.go("login");
         }
     }); //end $stateChangeStart
+
+    //get current state on rootScope; so header element can be hidden on welcome/landing page
+    $rootScope.$state = $state;
 
 }]); //end myApp.run
