@@ -40,6 +40,10 @@ body, .ng-scope {
     -o-background-size: cover;
 }
 
+back-color {
+    background-color: rgba(126, 206, 207, 0.4);
+}
+
 body {
 font-family: "Rubik", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
