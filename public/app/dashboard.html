@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row">
+    <div class="row  back-color">
         <h2>Analytics Dashboard</h2>
         <!-- using UI-Bootstrap -->
         <!-- define values, and adjust values when button is pressed -->
@@ -24,21 +24,13 @@
         <!-- <pre>{{chartTimeFrame || 'null'}}</pre>
         <pre>{{chartType || 'null'}}</pre> -->
 
-
         <section id="auth-button"></section>
         <section id="view-selector"></section>
-
-
+    </div>
+    <div>
         <!-- <h4>{{chartType | uppercase }}</h4> -->
         <canvas id="barChart" width="800" height="400"></canvas>
+    </div>
 
-        <!--Use this if multiple charts are implemented
-        <ul id=chartsList>
-        <li ng-repeat="chart in dCharts">
-        {{chart | json }}
-        {{$index + 1 }}
-        <canvas id="chart-{{ $index + 1 }}" width="800" height="400"></canvas>
-    </li>
-</ul> -->
-</div>
+
 </div>
