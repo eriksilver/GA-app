@@ -1,7 +1,7 @@
 /*!
- * Landing page style adapted from:
- * Start Bootstrap - Stylish Portfolio Bootstrap Theme (http://startbootstrap.com)
- */
+* Landing page style adapted from:
+* Start Bootstrap - Stylish Portfolio Bootstrap Theme (http://startbootstrap.com)
+*/
 
 /*
 background color code:	#7ECECF //R: 126 G: 206 B: 207
@@ -11,21 +11,26 @@ background color code:	#7ECECF //R: 126 G: 206 B: 207
 
 html,
 body, .ng-scope {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
+
+body {
+    font-family: "Rubik", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 /* Header */
 
 .landing {
-  display: table;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: url(https://cdn.shopify.com/s/files/1/0963/3404/files/shutterstock_166712030.jpg?889749713921931686) no-repeat center center scroll;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(https://cdn.shopify.com/s/files/1/0963/3404/files/shutterstock_166712030.jpg?889749713921931686) no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
 }
 
 .header {
@@ -40,51 +45,70 @@ body, .ng-scope {
     -o-background-size: cover;
 }
 
-back-color {
+.back-color {
     background-color: rgba(126, 206, 207, 0.4);
 }
 
-body {
-font-family: "Rubik", "Helvetica Neue", Helvetica, Arial, sans-serif;
+/* Footer */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    padding: 5px 0;
+    color: #fff;
+    /*background-color: rgba(126, 206, 207, 0.7);*/
+    background-color: rgba(126, 206, 207, 1);
+
 }
 
-  .text-vertical-center {
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+.text-vertical-center {
     display: table-cell;
     text-align: center;
     vertical-align: center;
     text-transform: lowercase;
-  }
-  .text-vertical-center h1 {
+}
+.text-vertical-center h1 {
     margin: 0;
     padding: 0;
     font-size: 4.5em;
     font-weight: 700;
     text-transform: capitalize;
-  }
-  /* Custom Button Styles */
+}
+/* Custom Button Styles */
 
-  .btn-dark {
+.btn-dark {
     border-radius: 0;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.4);
-  }
-  .btn-dark:hover,
-  .btn-dark:focus,
-  .btn-dark:active {
+}
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.7);
-  }
-  .btn-light {
+}
+.btn-light {
     border-radius: 0;
     color: #333;
     background-color: rgb(255, 255, 255);
-  }
-  .btn-light:hover,
-  .btn-light:focus,
-  .btn-light:active {
+}
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active {
     color: #333;
     background-color: rgba(255, 255, 255, 0.8);
-  }
+}
 
 /* Side Menu */
 
@@ -169,15 +193,4 @@ font-family: "Rubik", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 .toggle {
     margin: 5px 5px 0 0;
-}
-
-/* Footer */
-footer {
-    padding: 5px 0;
-    /* height: 5px; */
-    /* margin: 500px; */
-    color: #fff;
-    /*background-color: rgba(126, 206, 207, 0.7);*/
-    background-color: rgba(126, 206, 207, 1);
-
 }

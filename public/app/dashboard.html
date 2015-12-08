@@ -1,45 +1,44 @@
+<div class="container">
+    <div class="row">
+        <h2>Analytics Dashboard</h2>
+        <!-- using UI-Bootstrap -->
+        <!-- define values, and adjust values when button is pressed -->
 
-<div class="row">
-    <h2>Analytics Dashboard</h2>
-    <!-- using UI-Bootstrap -->
-    <!-- define values, and adjust values when button is pressed -->
-
-    <div class="btn-group">
-        <label class="btn btn-primary" uncheckable>Days:</label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'7daysAgo'">7
-        </label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'14daysAgo'">14
-        </label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'30daysAgo'">30
-        </label>
-        <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'60daysAgo'">60
-        </label>
-    </div>
-    <div class="btn-group">
-        <label class="btn btn-primary" uncheckable>Chart:</label>
-        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'users'">Users
-        </label>
-        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'bounces'">Bounces
-        </label>
-        <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'avgsessionDuration'">Session Duration
-    </div>
-    <!-- <pre>{{chartTimeFrame || 'null'}}</pre>
-    <pre>{{chartType || 'null'}}</pre> -->
+        <div class="btn-group">
+            <label class="btn btn-primary" uncheckable>Days:</label>
+            <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'7daysAgo'">7
+            </label>
+            <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'14daysAgo'">14
+            </label>
+            <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'30daysAgo'">30
+            </label>
+            <label class="btn btn-primary" ng-model="chartTimeFrame" uib-btn-radio="'60daysAgo'">60
+            </label>
+        </div>
+        <div class="btn-group">
+            <label class="btn btn-primary" uncheckable>Chart:</label>
+            <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'users'">Users</label>
+            <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'bounces'">Bounces</label>
+            <label class="btn btn-primary" ng-model="chartType" uib-btn-radio="'avgsessionDuration'">Session Duration</label>
+        </div>
+        <!-- <pre>{{chartTimeFrame || 'null'}}</pre>
+        <pre>{{chartType || 'null'}}</pre> -->
 
 
-    <section id="auth-button"></section>
-    <section id="view-selector"></section>
+        <section id="auth-button"></section>
+        <section id="view-selector"></section>
 
 
-    <!-- <h4>{{chartType | uppercase }}</h4> -->
-    <canvas id="barChart" width="800" height="400"></canvas>
+        <!-- <h4>{{chartType | uppercase }}</h4> -->
+        <canvas id="barChart" width="800" height="400"></canvas>
 
-    <!--Use this if multiple charts are implemented
-     <ul id=chartsList>
+        <!--Use this if multiple charts are implemented
+        <ul id=chartsList>
         <li ng-repeat="chart in dCharts">
-            {{chart | json }}
-            {{$index + 1 }}
-            <canvas id="chart-{{ $index + 1 }}" width="800" height="400"></canvas>
-        </li>
-    </ul> -->
+        {{chart | json }}
+        {{$index + 1 }}
+        <canvas id="chart-{{ $index + 1 }}" width="800" height="400"></canvas>
+    </li>
+</ul> -->
+</div>
 </div>
