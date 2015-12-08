@@ -38,41 +38,37 @@
 
 
 <body ng-controller="AppCtrl">
-    <div id="wrap"> <!-- wrap content to push footer down -->
-
-        <!-- Navigation -->
-        <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-        <nav id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-                <li class="sidebar-brand">
-                    <a ui-sref="welcome" onclick = $("#menu-close").click(); >Welcome</a>
-                </li>
-                <li>
-                    <a ui-sref="login" onclick = $("#menu-close").click(); >login</a>
-                </li>
-                <li>
-                    <a ui-sref="dashboard" onclick = $("#menu-close").click(); >dashboard</a>
-                </li>
-                <li>
-                    <a ui-sref="profile" onclick = $("#menu-close").click(); >profile</a>
-                </li>
-            </ul>
-        </nav>
-        <div class="header" data-ng-hide="$state.includes('welcome')">
-            <div class="text-vertical-center">
-                <h1>Analytics Dashboard</h1>
-                <h3>Simple charts for your Google Analytics</i></h3>
-            </div>
+    <!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li class="sidebar-brand">
+                <a ui-sref="welcome" onclick = $("#menu-close").click(); >Welcome</a>
+            </li>
+            <li>
+                <a ui-sref="login" onclick = $("#menu-close").click(); >login</a>
+            </li>
+            <li>
+                <a ui-sref="dashboard" onclick = $("#menu-close").click(); >dashboard</a>
+            </li>
+            <li>
+                <a ui-sref="profile" onclick = $("#menu-close").click(); >profile</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="header" data-ng-hide="$state.includes('welcome')">
+        <div class="text-vertical-center">
+            <h1>Analytics Dashboard</h1>
+            <h3>Simple charts for your Google Analytics</i></h3>
         </div>
+    </div>
 
 
-        <main ui-view></main>
-    </div> <!--  end div wrap -->
+    <main ui-view></main>
 
     <!-- Footer -->
     <footer data-ng-hide="$state.includes('dashboard')">
-        <!-- <div class="container"> -->
         <div class="row">
             <div class="col-lg-10 col-lg-offset-1 text-center">
                 <!--<hr class="small">-->
@@ -80,7 +76,6 @@
                 <p class="text-muted">Copyright &copy; Analytics Dashboard {{date | date:'yyyy'}}</p>
             </div>
         </div>
-        <!-- </div> -->
     </footer>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

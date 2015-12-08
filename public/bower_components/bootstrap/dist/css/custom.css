@@ -51,25 +51,15 @@ body {
 
 /* Footer */
 footer {
-    position: absolute;
+    /*position: absolute;
     bottom: 0;
     width: 100%;
-    height: 60px;
+    height: 60px;*/
     padding: 5px 0;
     color: #fff;
     /*background-color: rgba(126, 206, 207, 0.7);*/
     background-color: rgba(126, 206, 207, 1);
 
-}
-
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -60px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px;
 }
 
 .text-vertical-center {
