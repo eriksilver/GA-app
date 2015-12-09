@@ -1,8 +1,8 @@
 ## Analytics Dashboard
 
-## Overview
+### Overview
 
-The Analytics Dashboard easily retrieves and displays a user's Google Analytics data in an easy-to-digest charts.
+The Analytics Dashboard retrieves and displays a user's Google Analytics data in an easy-to-digest charts.
 
 Key Components:
 <ol>  
@@ -13,7 +13,7 @@ Key Components:
   <li>Serve app with Node.js and Heroku</li>
 </ol>
 
-## Stack
+### Stack
 
 <ul>
   <li>AngularJS</li>
@@ -23,7 +23,7 @@ Key Components:
   <li>Bootstrap</li>
 </ul>
 
-## To run
+### To run
 
-Local: ```forego start```
+Local: ```forego start``` <br>
 Web: [https://dashboard-analytics.herokuapp.com/](https://dashboard-analytics.herokuapp.com/)
